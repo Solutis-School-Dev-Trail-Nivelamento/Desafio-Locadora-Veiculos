@@ -23,7 +23,7 @@ public abstract class Pessoa {
     private LocalDate dataNascimento;
 
     @Enumerated(EnumType.STRING)  // Mapeia o enum como String no banco de dados
-    @Column(length = 10, nullable = false)  // Ajuste o comprimento conforme necessário
+    @Column(length = 10)
     private Sexo sexo;
 
     public Long getId() {
@@ -64,5 +64,13 @@ public abstract class Pessoa {
 
     public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public Sexo getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(Sexo sexo) {
+        this.sexo = sexo;
     }
 }
