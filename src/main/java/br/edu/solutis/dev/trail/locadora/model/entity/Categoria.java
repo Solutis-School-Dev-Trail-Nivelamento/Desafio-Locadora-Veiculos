@@ -1,4 +1,4 @@
-package br.edu.solutis.dev.trail.locadora.model;
+package br.edu.solutis.dev.trail.locadora.model.entity;
 
 public enum Categoria {
     HATCH_COMPACTO,

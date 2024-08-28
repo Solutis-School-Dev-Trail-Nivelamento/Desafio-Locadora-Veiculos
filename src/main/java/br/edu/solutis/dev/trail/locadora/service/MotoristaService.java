@@ -1,7 +1,7 @@
 package br.edu.solutis.dev.trail.locadora.service;
 
 import br.edu.solutis.dev.trail.locadora.exceptions.BusinessException;
-import br.edu.solutis.dev.trail.locadora.model.Motorista;
+import br.edu.solutis.dev.trail.locadora.model.entity.Motorista;
 import br.edu.solutis.dev.trail.locadora.repository.MotoristaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
