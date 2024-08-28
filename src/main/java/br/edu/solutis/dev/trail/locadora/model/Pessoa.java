@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo", length = 1, discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("P")
 public abstract class Pessoa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +24,9 @@ public abstract class Pessoa {
 
     @Column(length = 50, nullable = false)
     private LocalDate dataNascimento;
+
+    @Column(insertable=false, updatable=false)
+    private String tipo;
 
     @Enumerated(EnumType.STRING)  // Mapeia o enum como String no banco de dados
     @Column(length = 10)
@@ -64,6 +70,14 @@ public abstract class Pessoa {
 
     public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public Sexo getSexo() {

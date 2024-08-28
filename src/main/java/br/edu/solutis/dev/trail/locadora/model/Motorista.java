@@ -2,7 +2,8 @@ package br.edu.solutis.dev.trail.locadora.model;
 
 import jakarta.persistence.*;
 
-@Entity(name = "tb_motorista")
+@Entity
+@DiscriminatorValue(value = "M")
 public class Motorista extends Pessoa{
 
     @Column(length = 50, nullable = false, unique = true)
