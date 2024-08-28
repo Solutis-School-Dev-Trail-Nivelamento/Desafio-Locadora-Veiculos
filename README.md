@@ -4,14 +4,6 @@
 1. Inicie a aplicação.
 2. **Swagger:** `http://localhost:8080/swagger-ui/index.html`
   
-
-## Verificando no Banco de Dados
-Se você estiver usando o banco H2, pode acessar o console H2 via http://localhost:8080/h2-console para verificar se os dados foram salvos. Se estiver usando MySQL, pode usar qualquer ferramenta de gerenciamento de banco de dados, como MySQL Workbench.
-
-- JDBC URL: `jdbc:h2:mem:locadora`
-- username: `locadora`
-- password:
-
 ## Estrutura do projeto:
 - **Entidade:** Representa a tabela no banco.
 - **Repositório:** Gerencia a persistência e recuperação dos dados.
