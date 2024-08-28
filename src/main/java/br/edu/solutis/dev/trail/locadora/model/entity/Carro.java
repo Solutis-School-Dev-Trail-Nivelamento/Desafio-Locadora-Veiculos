@@ -7,7 +7,7 @@ import lombok.ToString;
 @Data
 @ToString
 @Entity
-public class ModeloCarro { //Atualizar esta classe
+public class Carro { //Atualizar esta classe
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

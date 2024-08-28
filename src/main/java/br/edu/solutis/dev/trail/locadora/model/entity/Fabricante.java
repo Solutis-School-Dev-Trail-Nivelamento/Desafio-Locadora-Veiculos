@@ -17,8 +17,8 @@ public class Fabricante { //atualizar esta classe
 
     private String nome;
 
-    @OneToMany(mappedBy = "fabricante", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ModeloCarro> modelos = new ArrayList<>();
+   /* @OneToMany(mappedBy = "fabricante", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Carro> modelos = new ArrayList<>();*/
 
 }
 

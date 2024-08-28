@@ -21,15 +21,12 @@ public abstract class PessoaService<T extends Pessoa> {
     @Autowired
     private PessoaRepository pessoaRepository;
 
-    /*A anotação @Transactional está corretamente aplicada ao método salvarMotorista,
-    garantindo que todas as operações de banco de dados sejam executadas em uma única transação.
-    Se ocorrer qualquer exceção dentro do método, todas as alterações serão revertidas.*/
     @Transactional
-    public void salvar(T pessoa) {
-
+    public T salvar(T pessoa) {
+        logger.info("Cadastrando pessoa.");
         validarPessoa(pessoa);
         verificarExistencia(pessoa);
-        pessoaRepository.save(pessoa);
+        return pessoaRepository.save(pessoa);
     }
 
     private void validarPessoa(T pessoa) {
@@ -77,4 +74,5 @@ public abstract class PessoaService<T extends Pessoa> {
             throw new BusinessException("CPF já cadastrado");
         }
     }
+
 }

@@ -18,7 +18,7 @@ public class FuncionarioService extends PessoaService<Funcionario>{
     private FuncionarioRepository funcionarioRepository;
 
     @Transactional
-    public void salvar(Funcionario funcionario){
+    public Funcionario salvar(Funcionario funcionario){
         logger.info("Cadastrando novo funcionario.");
 
         // Verificações antes de salvar o motorista
@@ -28,6 +28,7 @@ public class FuncionarioService extends PessoaService<Funcionario>{
         // Se todas as validações passarem, salva o motorista
         Funcionario funcionarioCadastrado = funcionarioRepository.save(funcionario);
         logger.info("Motorista cadastrado com sucesso ID: {}", funcionarioCadastrado.getId());
+        return funcionarioCadastrado;
     }
 
     private void validarFuncionario(Funcionario funcionario) {
@@ -48,7 +49,4 @@ public class FuncionarioService extends PessoaService<Funcionario>{
             throw new BusinessException("CNH já cadastrada");
         }
     }
-
-
-
 }

@@ -2,6 +2,7 @@ package br.edu.solutis.dev.trail.locadora.service;
 
 import br.edu.solutis.dev.trail.locadora.exceptions.BusinessException;
 import br.edu.solutis.dev.trail.locadora.model.entity.Motorista;
+import br.edu.solutis.dev.trail.locadora.model.entity.Pessoa;
 import br.edu.solutis.dev.trail.locadora.repository.MotoristaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,18 +19,19 @@ public class MotoristaService extends PessoaService<Motorista> {
     private MotoristaRepository motoristaRepository;
 
     @Transactional
-    public void salvar(Motorista motorista) {
+    public Motorista salvar(Motorista motorista) {
 
         logger.info("Cadastrando novo motorista.");
 
         // Verificações antes de salvar o motorista
+
         validarMotorista(motorista);
         verificarExistencia(motorista);
 
         // Se todas as validações passarem, salva o motorista
         Motorista motoristaCadastrado = motoristaRepository.save(motorista);
         logger.info("Motorista cadastrado com sucesso ID: {}", motoristaCadastrado.getId());
-
+         return  motoristaCadastrado;
     }
 
     private void validarMotorista(Motorista motorista) {
