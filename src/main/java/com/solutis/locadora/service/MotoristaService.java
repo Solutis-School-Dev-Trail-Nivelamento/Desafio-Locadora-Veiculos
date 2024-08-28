@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Optional;
 
 @Service
@@ -23,6 +25,9 @@ public class MotoristaService {
         this.motoristaRepository = motoristaRepository;
     }
 
+    /*A anotação @Transactional está corretamente aplicada ao método salvarMotorista,
+    garantindo que todas as operações de banco de dados sejam executadas em uma única transação.
+    Se ocorrer qualquer exceção dentro do método, todas as alterações serão revertidas.*/
     @Transactional
     public void salvarMotorista(Motorista motorista) {
 
@@ -39,26 +44,39 @@ public class MotoristaService {
     }
 
     private void validarCliente(Motorista motorista) {
-        Optional.ofNullable(motorista.getNome()).orElseThrow(() -> {
-            logger.error("O campo nome não pode ser nulo.");
-            return new BusinessException("O campo nome não pode ser nulo.");
-        });
-        Optional.ofNullable(motorista.getEmail()).orElseThrow(() -> {
-            logger.error("O campo email não pode ser nulo.");
-            return new BusinessException("O campo email não pode ser nulo.");
-        });
-        Optional.ofNullable(motorista.getCpf()).orElseThrow(() -> {
-            logger.error("O campo cpf não pode ser nulo.");
-            return new BusinessException("O campo cpf não pode ser nulo.");
-        });
-        Optional.ofNullable(motorista.getCnh()).orElseThrow(() -> {
-            logger.error("O campo cnh não pode ser nulo.");
-            return new BusinessException("O campo cnh não pode ser nulo.");
-        });
-        Optional.ofNullable(motorista.getDataNascimento()).orElseThrow(() -> {
-            logger.error("O campo data de nascimento não pode ser nulo.");
-            return new BusinessException("O campo data de nascimento não pode ser nulo.");
-        });
+        validarCampoNaoNulo(motorista.getNome(), "nome");
+        validarCampoNaoNulo(motorista.getEmail(), "email");
+        validarCampoNaoNulo(motorista.getCpf(), "cpf");
+        validarCampoNaoNulo(motorista.getCnh(), "cnh");
+        validarDataNascimento(motorista.getDataNascimento());
+    }
+
+    private void validarCampoNaoNulo(String campo, String nomeCampo) {
+        if (campo == null || campo.isEmpty()) {
+            String mensagem = String.format("O campo %s não pode ser nulo.", nomeCampo);
+            logger.error(mensagem);
+            throw new BusinessException(mensagem);
+        }
+    }
+
+    private void validarDataNascimento(LocalDate dataNascimento) {
+        if (dataNascimento == null) {
+            String mensagem = "O campo data de nascimento não pode ser nulo.";
+            logger.error(mensagem);
+            throw new BusinessException(mensagem);
+        }
+
+        if (dataNascimento.isAfter(LocalDate.now())) {
+            String mensagem = "A data de nascimento não pode ser no futuro.";
+            logger.error(mensagem);
+            throw new BusinessException(mensagem);
+        }
+
+        if (Period.between(dataNascimento, LocalDate.now()).getYears() < 18) {
+            String mensagem = "O motorista deve ter pelo menos 18 anos.";
+            logger.error(mensagem);
+            throw new BusinessException(mensagem);
+        }
     }
 
     private void verificarExistencia(Motorista motorista) {
