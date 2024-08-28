@@ -18,7 +18,7 @@ public class MotoristaService extends PessoaService<Motorista> {
     private MotoristaRepository motoristaRepository;
 
     @Transactional
-    public void salvarPessoa(Motorista motorista) {
+    public void salvar(Motorista motorista) {
 
         logger.info("Cadastrando novo motorista.");
 

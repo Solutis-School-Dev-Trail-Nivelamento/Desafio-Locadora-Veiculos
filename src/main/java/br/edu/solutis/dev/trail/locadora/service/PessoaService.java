@@ -25,7 +25,7 @@ public abstract class PessoaService<T extends Pessoa> {
     garantindo que todas as operações de banco de dados sejam executadas em uma única transação.
     Se ocorrer qualquer exceção dentro do método, todas as alterações serão revertidas.*/
     @Transactional
-    public void salvarPessoa(T pessoa) {
+    public void salvar(T pessoa) {
 
         validarPessoa(pessoa);
         verificarExistencia(pessoa);

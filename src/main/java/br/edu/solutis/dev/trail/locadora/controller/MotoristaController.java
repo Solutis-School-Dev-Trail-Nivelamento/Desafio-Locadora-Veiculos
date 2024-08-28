@@ -26,7 +26,7 @@ public class MotoristaController {
     })
     public ResponseEntity<String> cadastrar(@RequestBody Motorista motorista) {
         try {
-            motoristaService.salvarPessoa(motorista);
+            motoristaService.salvar(motorista);
             return new ResponseEntity<>("Cadastro realizado com sucesso!", HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>("Cadastro não realizado: " + e.getMessage(), HttpStatus.BAD_REQUEST);

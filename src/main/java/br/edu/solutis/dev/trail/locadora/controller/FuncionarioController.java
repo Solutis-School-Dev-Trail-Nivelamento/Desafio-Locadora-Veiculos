@@ -30,7 +30,7 @@ public class FuncionarioController {
     })
     public ResponseEntity<String> cadastrar(@RequestBody Funcionario funcionario) {
         try {
-            funcionarioService.salvarPessoa(funcionario);
+            funcionarioService.salvar(funcionario);
             return new ResponseEntity<>("Cadastro realizado com sucesso!", HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>("Cadastro não realizado: " + e.getMessage(), HttpStatus.BAD_REQUEST);
