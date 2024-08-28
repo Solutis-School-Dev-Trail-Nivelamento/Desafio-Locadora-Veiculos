@@ -21,4 +21,7 @@ public class ModeloCarro { //Atualizar esta classe
     @ManyToOne(fetch = FetchType.LAZY)
     private Fabricante fabricante;
 
+    }
+
+
 
