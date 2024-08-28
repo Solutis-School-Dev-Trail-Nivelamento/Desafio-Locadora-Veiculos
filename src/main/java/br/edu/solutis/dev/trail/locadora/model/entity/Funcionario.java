@@ -7,7 +7,7 @@ import lombok.ToString;
 @Data
 @ToString
 @Entity
-@DiscriminatorValue(value = "Funcionario")
+@DiscriminatorValue(value = "FUNCIONARIO")
 public class Funcionario extends Pessoa{
 
     @Column(length = 50, nullable = false,unique = true)

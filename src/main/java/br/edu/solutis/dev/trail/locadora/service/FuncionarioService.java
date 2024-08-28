@@ -18,7 +18,7 @@ public class FuncionarioService extends PessoaService<Funcionario>{
     private FuncionarioRepository funcionarioRepository;
 
     @Transactional
-    public void salvarFuncionario(Funcionario funcionario){
+    public void salvarPessoa(Funcionario funcionario){
         logger.info("Cadastrando novo funcionario.");
 
         // Verificações antes de salvar o motorista

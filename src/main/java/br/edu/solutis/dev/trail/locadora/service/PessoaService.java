@@ -26,6 +26,7 @@ public abstract class PessoaService<T extends Pessoa> {
     Se ocorrer qualquer exceção dentro do método, todas as alterações serão revertidas.*/
     @Transactional
     public void salvarPessoa(T pessoa) {
+
         validarPessoa(pessoa);
         verificarExistencia(pessoa);
         pessoaRepository.save(pessoa);

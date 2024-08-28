@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @ToString
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "tipo", length = 1, discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "tipo", length = 10, discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("P")
 public abstract class Pessoa {
     @Id
