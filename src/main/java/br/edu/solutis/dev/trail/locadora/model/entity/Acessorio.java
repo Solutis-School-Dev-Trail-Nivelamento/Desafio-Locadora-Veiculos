@@ -18,7 +18,4 @@ public class Acessorio {
 
     @Column(length = 50, nullable = false)
     private String descricao;
-
-    @ManyToMany(mappedBy = "acessorios")
-    private List<Carro> carros = new ArrayList<>();
 }
