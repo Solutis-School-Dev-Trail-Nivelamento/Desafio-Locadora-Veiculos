@@ -1,8 +1,8 @@
-package com.solutis.locadora.service;
+package br.edu.solutis.dev.trail.locadora.service;
 
-import com.solutis.locadora.exceptions.BusinessException;
-import com.solutis.locadora.model.Motorista;
-import com.solutis.locadora.repository.MotoristaRepository;
+import br.edu.solutis.dev.trail.locadora.exceptions.BusinessException;
+import br.edu.solutis.dev.trail.locadora.model.Motorista;
+import br.edu.solutis.dev.trail.locadora.repository.MotoristaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Optional;
 
 @Service
 public class MotoristaService {

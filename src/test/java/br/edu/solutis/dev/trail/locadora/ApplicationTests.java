@@ -1,4 +1,4 @@
-package com.solutis.locadora;
+package br.edu.solutis.dev.trail.locadora;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

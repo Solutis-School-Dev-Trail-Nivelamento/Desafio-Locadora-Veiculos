@@ -1,4 +1,4 @@
-package com.solutis.locadora.exceptions;
+package br.edu.solutis.dev.trail.locadora.exceptions;
 
 
 public class BusinessException extends RuntimeException {

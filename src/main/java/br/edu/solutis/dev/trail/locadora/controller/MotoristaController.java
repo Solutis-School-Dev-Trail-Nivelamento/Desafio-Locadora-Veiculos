@@ -1,8 +1,8 @@
-package com.solutis.locadora.controller;
+package br.edu.solutis.dev.trail.locadora.controller;
 
-import com.solutis.locadora.exceptions.BusinessException;
-import com.solutis.locadora.model.Motorista;
-import com.solutis.locadora.service.MotoristaService;
+import br.edu.solutis.dev.trail.locadora.exceptions.BusinessException;
+import br.edu.solutis.dev.trail.locadora.service.MotoristaService;
+import br.edu.solutis.dev.trail.locadora.model.Motorista;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

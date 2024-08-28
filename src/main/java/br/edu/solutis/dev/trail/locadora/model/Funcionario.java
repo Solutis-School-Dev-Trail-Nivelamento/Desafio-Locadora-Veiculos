@@ -1,4 +1,4 @@
-package com.solutis.locadora.model;
+package br.edu.solutis.dev.trail.locadora.model;
 
 import jakarta.persistence.*;
 
