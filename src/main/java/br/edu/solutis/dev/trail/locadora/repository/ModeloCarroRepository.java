@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ModeloCarroRepository extends JpaRepository<ModeloCarro, Long> {
-   // boolean existsBy // para não ser duplicado atualizar mais tarde
+   boolean existsByDescricao (String descricao);
 }
 
