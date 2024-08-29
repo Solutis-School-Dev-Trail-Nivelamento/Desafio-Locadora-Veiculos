@@ -37,7 +37,7 @@ public abstract class Aluguel {
 
     @ManyToOne
     @JoinColumn(name = "motorista_id", nullable = false) // Relacionamento muitos-para-um com Motorista
-    private Motorista motorista;
+    private Cliente cliente;
 
    @ManyToOne
     @JoinColumn(name = "carro_id", nullable = false) // Relacionamento muitos-para-um com Carro

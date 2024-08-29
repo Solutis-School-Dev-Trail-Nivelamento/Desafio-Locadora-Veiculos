@@ -1,6 +1,8 @@
 package br.edu.solutis.dev.trail.locadora.model.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
 
@@ -18,6 +20,8 @@ public abstract class Pessoa {
     private Long id;
 
     @Column(length = 50, nullable = false)
+    @NotBlank
+    @NotNull
     private String nome;
 
     @Column(length = 50, nullable = false, unique = true)

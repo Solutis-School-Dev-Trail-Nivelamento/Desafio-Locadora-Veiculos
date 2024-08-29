@@ -1,6 +1,7 @@
 package br.edu.solutis.dev.trail.locadora.service;
 
 import br.edu.solutis.dev.trail.locadora.exceptions.BusinessException;
+
 import br.edu.solutis.dev.trail.locadora.model.entity.Pessoa;
 import br.edu.solutis.dev.trail.locadora.repository.PessoaRepository;
 
@@ -24,8 +25,8 @@ public abstract class PessoaService<T extends Pessoa> {
     @Transactional
     public T salvar(T pessoa) {
         logger.info("Cadastrando pessoa.");
-        validarPessoa(pessoa);
-        verificarExistencia(pessoa);
+        //validarPessoa(pessoa);
+        //verificarExistencia(pessoa);
         return pessoaRepository.save(pessoa);
     }
 
@@ -63,16 +64,4 @@ public abstract class PessoaService<T extends Pessoa> {
             throw new BusinessException(mensagem);
         }
     }
-
-    private void verificarExistencia(Pessoa pessoa) {
-        if (pessoaRepository.existsByEmail(pessoa.getEmail())) {
-            logger.error("Email já cadastrado");
-            throw new BusinessException("Email já cadastrado");
-        }
-        if (pessoaRepository.existsByCpf(pessoa.getCpf())) {
-            logger.error("CPF já cadastrado");
-            throw new BusinessException("CPF já cadastrado");
-        }
-    }
-
 }
