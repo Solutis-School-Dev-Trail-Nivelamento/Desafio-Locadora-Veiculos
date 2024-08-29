@@ -2,6 +2,7 @@ package br.edu.solutis.dev.trail.locadora.service;
 
 import br.edu.solutis.dev.trail.locadora.exceptions.BusinessException;
 import br.edu.solutis.dev.trail.locadora.model.entity.Cliente;
+import br.edu.solutis.dev.trail.locadora.model.entity.Pessoa;
 import br.edu.solutis.dev.trail.locadora.repository.ClienteRepository;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Optional;
 
 @Service
 public class ClienteService extends PessoaService<Cliente> {
@@ -35,6 +37,10 @@ public class ClienteService extends PessoaService<Cliente> {
         Cliente clienteCadastrado = clienteRepository.save(cliente);
         logger.info("Cliente cadastrado com sucesso ID: {}", clienteCadastrado.getId());
         return clienteCadastrado;
+    }
+
+    public Optional<Cliente> obterPorId(Long id){
+        return clienteRepository.findById(id);
     }
 
     private void validarMotorista(Cliente cliente) {

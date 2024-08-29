@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public abstract class PessoaService<T extends Pessoa> {
 
@@ -17,9 +20,15 @@ public abstract class PessoaService<T extends Pessoa> {
     @Autowired
     private PessoaRepository pessoaRepository;
 
-    @Transactional
-    public T salvar(T pessoa) {
+    //@Transactional
+   /* public T salvar(T pessoa) {
         logger.info("Cadastrando pessoa.");
         return pessoaRepository.save(pessoa);
-    }
+    }*/
+
+    /*public Optional<Pessoa> obterPorId(Long id){
+        logger.info("Obtendo pessoa por id.");
+        return pessoaRepository.findById(id);
+    }*/
+
 }
