@@ -1,7 +1,5 @@
 package br.edu.solutis.dev.trail.locadora.service;
 
-import br.edu.solutis.dev.trail.locadora.exceptions.BusinessException;
-
 import br.edu.solutis.dev.trail.locadora.model.entity.Pessoa;
 import br.edu.solutis.dev.trail.locadora.repository.PessoaRepository;
 
@@ -10,9 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.time.Period;
 
 @Service
 public abstract class PessoaService<T extends Pessoa> {
@@ -25,43 +20,6 @@ public abstract class PessoaService<T extends Pessoa> {
     @Transactional
     public T salvar(T pessoa) {
         logger.info("Cadastrando pessoa.");
-        //validarPessoa(pessoa);
-        //verificarExistencia(pessoa);
         return pessoaRepository.save(pessoa);
-    }
-
-    private void validarPessoa(T pessoa) {
-        validarCampoNaoNulo(pessoa.getNome(), "nome");
-        validarCampoNaoNulo(pessoa.getEmail(), "email");
-        validarCampoNaoNulo(pessoa.getCpf(), "cpf");
-        validarDataNascimento(pessoa.getDataNascimento());
-    }
-
-    private void validarCampoNaoNulo(String campo, String nomeCampo) {
-        if (campo == null || campo.isEmpty()) {
-            String mensagem = String.format("O campo %s não pode ser nulo.", nomeCampo);
-            logger.error(mensagem);
-            throw new BusinessException(mensagem);
-        }
-    }
-
-    private void validarDataNascimento(LocalDate dataNascimento) {
-        if (dataNascimento == null) {
-            String mensagem = "O campo data de nascimento não pode ser nulo.";
-            logger.error(mensagem);
-            throw new BusinessException(mensagem);
-        }
-
-        if (dataNascimento.isAfter(LocalDate.now())) {
-            String mensagem = "A data de nascimento não pode ser no futuro.";
-            logger.error(mensagem);
-            throw new BusinessException(mensagem);
-        }
-
-        if (Period.between(dataNascimento, LocalDate.now()).getYears() < 18) {
-            String mensagem = "A pessoa deve ter pelo menos 18 anos.";
-            logger.error(mensagem);
-            throw new BusinessException(mensagem);
-        }
     }
 }
