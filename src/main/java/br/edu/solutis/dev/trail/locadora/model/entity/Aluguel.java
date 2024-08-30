@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Calendar;
 
@@ -28,10 +29,13 @@ public class Aluguel implements Serializable {
     private LocalDate dataDevolucao;
 
     @Column(nullable = false)
-    private float valorTotal;
+    private BigDecimal valorTotal;
 
     @Column(length = 1, nullable = false)
     private String tipo;
+
+    @Column(length = 100, nullable = false)
+    private String termos;
 
    /* @OneToOne
     @JoinColumn(name = "apolice_id")
@@ -42,6 +46,6 @@ public class Aluguel implements Serializable {
     private Cliente cliente;
 
    @ManyToOne
-    @JoinColumn(name = "carro_id", nullable = false) // Relacionamento muitos-para-um com Carro
-    private Carro carro;
+   @JoinColumn(name = "carro_id", nullable = false) // Relacionamento muitos-para-um com Carro
+   private Carro carro;
 }
