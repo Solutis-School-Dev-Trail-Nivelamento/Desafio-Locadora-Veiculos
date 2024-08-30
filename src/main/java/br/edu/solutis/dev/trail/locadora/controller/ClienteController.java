@@ -45,6 +45,24 @@ public class ClienteController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @Operation(
+            description = "Atualiza um cliente e retorna as informações atualizadas",
+            summary = "Atualiza as informações de um cliente")
+    @PutMapping("/cliente/{id}")
+    public ResponseEntity<ClienteDTO> atualizaCliente(@PathVariable Long id, @RequestBody ClienteDTO clienteDTO) {
+
+        // Converte o DTO em entidade
+        Cliente cliente = clienteMapper.toEntity(clienteDTO);
+
+        // Salva o cliente usando o serviço
+        Cliente clienteAtualizado = clienteService.atualizarCliente(id, cliente);
+
+        // Converte a entidade salva de volta para DTO para retornar na resposta
+        ClienteDTO clienteResposta = clienteMapper.toDto(clienteAtualizado);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(clienteResposta);
+    }
+
     @PostMapping("/{clienteId}/alugueis")
     @Operation(summary = "Adicionando alugueis", description = "Adicionando alugueis para o cliente")
     public ResponseEntity<Void> adicionarAluguel(@PathVariable Long clienteId, @RequestBody Aluguel aluguel) {

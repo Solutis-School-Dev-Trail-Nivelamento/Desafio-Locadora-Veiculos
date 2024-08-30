@@ -15,6 +15,6 @@ public class Cliente extends Pessoa{
     @Column(length = 50, nullable = false, unique = true)
     private String cnh;
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.EAGER)
     private List<Aluguel> alugueis;
 }

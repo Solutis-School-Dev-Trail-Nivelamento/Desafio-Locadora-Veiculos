@@ -21,15 +21,26 @@ public class GlobalExceptionHandler {
         return ResponseEntity.unprocessableEntity().body(errorResponse);
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
-        ErrorResponse errorResponse = new ErrorResponse("Conflito de dados", e.getRootCause().getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
-    }
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
         ErrorResponse errorResponse = new ErrorResponse("Erro interno do servidor", e.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }@ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+        // Verifique se a exceção contém informações sobre a violação de chave única
+        if (e.getRootCause() != null && e.getRootCause().getMessage() != null) {
+            String rootCauseMessage = e.getRootCause().getMessage();
+
+            // Verifique a mensagem de erro para identificar se é um erro de duplicação de chave única
+            if (rootCauseMessage.contains("Duplicate entry")) {
+                ErrorResponse errorResponse = new ErrorResponse("Conflito de dados", "Registro duplicado encontrado: " + rootCauseMessage);
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+            }
+        }
+
+        // Caso não seja um erro de duplicação, trate como erro genérico de integridade
+        ErrorResponse errorResponse = new ErrorResponse("Conflito de dados", e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
+
 }

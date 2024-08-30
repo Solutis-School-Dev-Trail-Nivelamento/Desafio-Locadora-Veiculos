@@ -16,7 +16,7 @@ import java.time.Period;
 import java.util.Optional;
 
 @Service
-public class ClienteService{
+public class ClienteService {
 
     private static final Logger logger = LoggerFactory.getLogger(ClienteService.class);
 
@@ -30,7 +30,7 @@ public class ClienteService{
         logger.info("Cadastrando novo cliente.");
 
         // Verificações antes de salvar o motorista
-        validarMotorista(cliente);
+        validarCliente(cliente);
         verificarExistencia(cliente);
 
         // Se todas as validações passarem, salva o motorista
@@ -39,8 +39,40 @@ public class ClienteService{
         return clienteCadastrado;
     }
 
-    public Optional<Cliente> obterPorId(Long clienteId){
+    public Optional<Cliente> obterPorId(Long clienteId) {
         return clienteRepository.findById(clienteId);
+    }
+
+    @Transactional
+    public Cliente atualizarCliente(Long id, Cliente clienteNovo) {
+        Optional<Cliente> clienteExistenteOpt = clienteRepository.findById(id);
+
+        if (clienteExistenteOpt.isPresent()) {
+            Cliente clienteExistente = getCliente(clienteNovo, clienteExistenteOpt);
+
+            // Realiza validações após a atualização
+            validarCliente(clienteExistente);
+
+            // Salva o cliente atualizado no repositório
+            Cliente clienteAtualizado = clienteRepository.save(clienteExistente);
+            logger.info("Cliente atualizado com sucesso ID: {}", clienteAtualizado.getId());
+            return clienteAtualizado;
+        } else {
+            throw new BusinessException("Cliente não encontrado");
+        }
+    }
+
+    private static Cliente getCliente(Cliente clienteNovo, Optional<Cliente> clienteExistenteOpt) {
+        Cliente clienteExistente = clienteExistenteOpt.get();
+
+        // Atualiza os dados do cliente existente com os novos dados fornecidos
+        clienteExistente.setNome(clienteNovo.getNome());
+        clienteExistente.setCpf(clienteNovo.getCpf());
+        clienteExistente.setEmail(clienteNovo.getEmail());
+        clienteExistente.setDataNascimento(clienteNovo.getDataNascimento());
+        clienteExistente.setSexo(clienteNovo.getSexo());
+        clienteExistente.setCnh(clienteNovo.getCnh());
+        return clienteExistente;
     }
 
     @Transactional
@@ -54,7 +86,7 @@ public class ClienteService{
         clienteRepository.save(cliente); // Salva o cliente com o novo aluguel
     }
 
-    private void validarMotorista(Cliente cliente) {
+    private void validarCliente(Cliente cliente) {
         validarCampoNaoNulo(cliente.getNome(), "nome");
         validarCampoNaoNulo(cliente.getEmail(), "email");
         validarCampoNaoNulo(cliente.getCpf(), "cpf");
