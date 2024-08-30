@@ -4,13 +4,15 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Calendar;
 
 @Data
 @ToString
 @Entity
-public abstract class Aluguel {
+@Table(name = "tb_aluguel")
+public class Aluguel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +38,7 @@ public abstract class Aluguel {
     private ApoliceSeguro apoliceSeguro;*/
 
     @ManyToOne
-    @JoinColumn(name = "motorista_id", nullable = false) // Relacionamento muitos-para-um com Motorista
+    @JoinColumn(name = "cliente_id") // Relacionamento muitos-para-um com Motorista
     private Cliente cliente;
 
    @ManyToOne

@@ -1,8 +1,8 @@
 package br.edu.solutis.dev.trail.locadora.service;
 
 import br.edu.solutis.dev.trail.locadora.exceptions.BusinessException;
+import br.edu.solutis.dev.trail.locadora.model.entity.Aluguel;
 import br.edu.solutis.dev.trail.locadora.model.entity.Cliente;
-import br.edu.solutis.dev.trail.locadora.model.entity.Pessoa;
 import br.edu.solutis.dev.trail.locadora.repository.ClienteRepository;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -16,7 +16,7 @@ import java.time.Period;
 import java.util.Optional;
 
 @Service
-public class ClienteService extends PessoaService<Cliente> {
+public class ClienteService{
 
     private static final Logger logger = LoggerFactory.getLogger(ClienteService.class);
 
@@ -39,8 +39,19 @@ public class ClienteService extends PessoaService<Cliente> {
         return clienteCadastrado;
     }
 
-    public Optional<Cliente> obterPorId(Long id){
-        return clienteRepository.findById(id);
+    public Optional<Cliente> obterPorId(Long clienteId){
+        return clienteRepository.findById(clienteId);
+    }
+
+    @Transactional
+    public void adicionarAluguel(Long clienteId, Aluguel aluguel) {
+        Cliente cliente = clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+
+        aluguel.setCliente(cliente); // Estabelece o relacionamento entre Aluguel e Cliente
+        cliente.getAlugueis().add(aluguel); // Adiciona o aluguel à lista de alugueis do cliente
+
+        clienteRepository.save(cliente); // Salva o cliente com o novo aluguel
     }
 
     private void validarMotorista(Cliente cliente) {

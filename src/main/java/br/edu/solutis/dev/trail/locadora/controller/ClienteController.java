@@ -1,6 +1,7 @@
 package br.edu.solutis.dev.trail.locadora.controller;
 
 import br.edu.solutis.dev.trail.locadora.exceptions.BusinessException;
+import br.edu.solutis.dev.trail.locadora.model.entity.Aluguel;
 import br.edu.solutis.dev.trail.locadora.service.ClienteService;
 import br.edu.solutis.dev.trail.locadora.model.entity.Cliente;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +13,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/clientes")
+@RequestMapping("/clientes")
 public class ClienteController {
 
     @Autowired
@@ -33,12 +34,18 @@ public class ClienteController {
         }
     }
 
-    @GetMapping("cliente/{id}")
-    @Operation(summary = "Cadastrando novo cliente", description = "Cadastrando novo cliente e retornando os dados criados")
+    @GetMapping("/cliente/{id}")
+    @Operation(summary = "Obtendo cliente pelo ID", description = "Obtendo cliente pelo ID e retornando os dados")
     public ResponseEntity<Cliente> obterCliente(@PathVariable Long id){
         Optional<Cliente> cliente = clienteService.obterPorId(id);
         return cliente.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 
+    @PostMapping("/{clienteId}/alugueis")
+    @Operation(summary = "Adicionando alugueis", description = "Adicionando alugueis para o cliente")
+    public ResponseEntity<Void> adicionarAluguel(@PathVariable Long clienteId, @RequestBody Aluguel aluguel) {
+        clienteService.adicionarAluguel(clienteId, aluguel);
+        return ResponseEntity.ok().build();
     }
 }
