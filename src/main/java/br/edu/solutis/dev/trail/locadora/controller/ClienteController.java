@@ -1,6 +1,7 @@
 package br.edu.solutis.dev.trail.locadora.controller;
 
-import br.edu.solutis.dev.trail.locadora.exceptions.BusinessException;
+import br.edu.solutis.dev.trail.locadora.mappers.ClienteMapper;
+import br.edu.solutis.dev.trail.locadora.model.dto.ClienteDTO;
 import br.edu.solutis.dev.trail.locadora.model.entity.Aluguel;
 import br.edu.solutis.dev.trail.locadora.service.ClienteService;
 import br.edu.solutis.dev.trail.locadora.model.entity.Cliente;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.dao.DataIntegrityViolationException;
 import java.util.Optional;
 
 @RestController
@@ -18,20 +18,23 @@ public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
+    @Autowired
+    private ClienteMapper clienteMapper;
+
 
     @PostMapping
     @Operation(summary = "Cadastrando novo cliente", description = "Cadastrando novo cliente e retornando os dados criados")
-    public ResponseEntity<?> cadastrar(@RequestBody Cliente cliente) {
-        try {
-            Cliente clienteSalvo = clienteService.salvar(cliente);
-            return new ResponseEntity<>(clienteSalvo, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>("Cadastro não realizado: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (BusinessException e) {
-            return new ResponseEntity<>("Erro de negócio: " + e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
-        } catch (DataIntegrityViolationException e) {
-            return new ResponseEntity<>("Conflito de dados: " + e.getRootCause().getMessage(), HttpStatus.CONFLICT);
-        }
+    public ResponseEntity<ClienteDTO> cadastrar(@RequestBody ClienteDTO clienteDTO) {
+        // Converte o DTO em entidade
+        Cliente cliente = clienteMapper.toEntity(clienteDTO);
+
+        // Salva o cliente usando o serviço
+        Cliente clienteSalvo = clienteService.salvarCliente(cliente);
+
+        // Converte a entidade salva de volta para DTO para retornar na resposta
+        ClienteDTO clienteResposta = clienteMapper.toDto(clienteSalvo);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(clienteResposta);
     }
 
     @GetMapping("/cliente/{id}")

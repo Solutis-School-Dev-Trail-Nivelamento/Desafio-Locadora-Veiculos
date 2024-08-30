@@ -25,7 +25,7 @@ public class ClienteService{
 
     @Valid
     @Transactional
-    public Cliente salvar(Cliente cliente) {
+    public Cliente salvarCliente(Cliente cliente) {
 
         logger.info("Cadastrando novo cliente.");
 
