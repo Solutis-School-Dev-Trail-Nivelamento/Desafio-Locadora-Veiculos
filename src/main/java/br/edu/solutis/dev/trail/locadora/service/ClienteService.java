@@ -1,10 +1,8 @@
 package br.edu.solutis.dev.trail.locadora.service;
 
 import br.edu.solutis.dev.trail.locadora.exceptions.BusinessException;
-import br.edu.solutis.dev.trail.locadora.model.entity.Aluguel;
 import br.edu.solutis.dev.trail.locadora.model.entity.Cliente;
 import br.edu.solutis.dev.trail.locadora.repository.ClienteRepository;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class ClienteService {
@@ -23,116 +21,79 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    @Valid
     @Transactional
     public Cliente salvarCliente(Cliente cliente) {
-
         logger.info("Cadastrando novo cliente.");
-
-        // Verificações antes de salvar o motorista
         validarCliente(cliente);
         verificarExistencia(cliente);
-
-        // Se todas as validações passarem, salva o motorista
         Cliente clienteCadastrado = clienteRepository.save(cliente);
         logger.info("Cliente cadastrado com sucesso ID: {}", clienteCadastrado.getId());
         return clienteCadastrado;
     }
 
-    public Optional<Cliente> obterPorId(Long clienteId) {
-        return clienteRepository.findById(clienteId);
+    public List<Cliente> obterTodos() {
+        logger.info("Obtendo todos os clientes.");
+        return clienteRepository.findAll();
+    }
+
+    public Cliente obterPorId(Long id) {
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new BusinessException("Cliente não encontrado"));
     }
 
     @Transactional
     public Cliente atualizarCliente(Long id, Cliente clienteNovo) {
-        Optional<Cliente> clienteExistenteOpt = clienteRepository.findById(id);
-
-        if (clienteExistenteOpt.isPresent()) {
-            Cliente clienteExistente = getCliente(clienteNovo, clienteExistenteOpt);
-
-            // Realiza validações após a atualização
-            validarCliente(clienteExistente);
-
-            // Salva o cliente atualizado no repositório
-            Cliente clienteAtualizado = clienteRepository.save(clienteExistente);
-            logger.info("Cliente atualizado com sucesso ID: {}", clienteAtualizado.getId());
-            return clienteAtualizado;
-        } else {
-            throw new BusinessException("Cliente não encontrado");
-        }
+        Cliente clienteExistente = obterPorId(id);
+        atualizarDados(clienteExistente, clienteNovo);
+        validarCliente(clienteExistente);
+        Cliente clienteAtualizado = clienteRepository.save(clienteExistente);
+        logger.info("Cliente atualizado com sucesso ID: {}", clienteAtualizado.getId());
+        return clienteAtualizado;
     }
 
-    private static Cliente getCliente(Cliente clienteNovo, Optional<Cliente> clienteExistenteOpt) {
-        Cliente clienteExistente = clienteExistenteOpt.get();
+    public void excluirCliente(Long id) {
+        logger.info("Excluindo cliente por ID.");
+        clienteRepository.deleteById(id);
+    }
 
-        // Atualiza os dados do cliente existente com os novos dados fornecidos
+    private void atualizarDados(Cliente clienteExistente, Cliente clienteNovo) {
         clienteExistente.setNome(clienteNovo.getNome());
         clienteExistente.setCpf(clienteNovo.getCpf());
         clienteExistente.setEmail(clienteNovo.getEmail());
         clienteExistente.setDataNascimento(clienteNovo.getDataNascimento());
         clienteExistente.setSexo(clienteNovo.getSexo());
         clienteExistente.setCnh(clienteNovo.getCnh());
-        return clienteExistente;
-    }
-
-    @Transactional
-    public void adicionarAluguel(Long clienteId, Aluguel aluguel) {
-        Cliente cliente = clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
-
-        aluguel.setCliente(cliente); // Estabelece o relacionamento entre Aluguel e Cliente
-        cliente.getAlugueis().add(aluguel); // Adiciona o aluguel à lista de alugueis do cliente
-
-        clienteRepository.save(cliente); // Salva o cliente com o novo aluguel
     }
 
     private void validarCliente(Cliente cliente) {
-        validarCampoNaoNulo(cliente.getNome(), "nome");
-        validarCampoNaoNulo(cliente.getEmail(), "email");
-        validarCampoNaoNulo(cliente.getCpf(), "cpf");
-        validarDataNascimento(cliente.getDataNascimento());
-        validarCampoNaoNulo(cliente.getCnh(), "cnh");
-    }
-
-    private void validarCampoNaoNulo(String campo, String nomeCampo) {
-        if (campo == null || campo.isEmpty()) {
-            String mensagem = String.format("O campo %s não pode ser nulo.", nomeCampo);
-            logger.error(mensagem);
-            throw new BusinessException(mensagem);
+        if (cliente.getNome() == null || cliente.getNome().isEmpty()) {
+            throw new BusinessException("O campo nome não pode ser nulo.");
         }
-    }
-
-    private void validarDataNascimento(LocalDate dataNascimento) {
-        if (dataNascimento == null) {
-            String mensagem = "O campo data de nascimento não pode ser nulo.";
-            logger.error(mensagem);
-            throw new BusinessException(mensagem);
+        if (cliente.getEmail() == null || cliente.getEmail().isEmpty()) {
+            throw new BusinessException("O campo email não pode ser nulo.");
         }
-
-        if (dataNascimento.isAfter(LocalDate.now())) {
-            String mensagem = "A data de nascimento não pode ser no futuro.";
-            logger.error(mensagem);
-            throw new BusinessException(mensagem);
+        if (cliente.getCpf() == null || cliente.getCpf().isEmpty()) {
+            throw new BusinessException("O campo CPF não pode ser nulo.");
         }
-
-        if (Period.between(dataNascimento, LocalDate.now()).getYears() < 18) {
-            String mensagem = "A pessoa deve ter pelo menos 18 anos.";
-            logger.error(mensagem);
-            throw new BusinessException(mensagem);
+        if (cliente.getDataNascimento() == null || cliente.getDataNascimento().isAfter(LocalDate.now())) {
+            throw new BusinessException("Data de nascimento inválida.");
+        }
+        if (Period.between(cliente.getDataNascimento(), LocalDate.now()).getYears() < 18) {
+            throw new BusinessException("A pessoa deve ter pelo menos 18 anos.");
+        }
+        if (cliente.getCnh() == null || cliente.getCnh().isEmpty()) {
+            throw new BusinessException("O campo CNH não pode ser nulo.");
         }
     }
 
     private void verificarExistencia(Cliente cliente) {
         if (clienteRepository.existsByEmail(cliente.getEmail())) {
-            logger.error("Email já cadastrado");
             throw new BusinessException("Email já cadastrado");
         }
         if (clienteRepository.existsByCpf(cliente.getCpf())) {
-            logger.error("CPF já cadastrado");
             throw new BusinessException("CPF já cadastrado");
         }
         if (clienteRepository.existsByCnh(cliente.getCnh())) {
-            logger.error("CNH já cadastrada");
             throw new BusinessException("CNH já cadastrada");
         }
     }

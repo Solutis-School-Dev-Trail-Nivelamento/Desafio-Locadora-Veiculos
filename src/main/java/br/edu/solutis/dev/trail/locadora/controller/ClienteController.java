@@ -10,10 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("/")
 public class ClienteController {
 
     @Autowired
@@ -21,52 +22,51 @@ public class ClienteController {
     @Autowired
     private ClienteMapper clienteMapper;
 
-
-    @PostMapping
-    @Operation(summary = "Cadastrando novo cliente", description = "Cadastrando novo cliente e retornando os dados criados")
-    public ResponseEntity<ClienteDTO> cadastrar(@RequestBody ClienteDTO clienteDTO) {
-        // Converte o DTO em entidade
+    @PostMapping("/cliente")
+    @Operation(summary = "Cadastra um novo cliente", description = "Cadastra um novo cliente e retorna os dados criados")
+    public ResponseEntity<ClienteDTO> cadastrarCliente(@RequestBody ClienteDTO clienteDTO) {
         Cliente cliente = clienteMapper.toEntity(clienteDTO);
-
-        // Salva o cliente usando o serviço
         Cliente clienteSalvo = clienteService.salvarCliente(cliente);
-
-        // Converte a entidade salva de volta para DTO para retornar na resposta
         ClienteDTO clienteResposta = clienteMapper.toDto(clienteSalvo);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteResposta);
+    }
+
+    @GetMapping("/clientes")
+    @Operation(summary = "Obtem todos clientes", description = "Retorna a informação com todos clientes cadastrados")
+    public ResponseEntity<List<ClienteDTO>> obterTodosClientes() {
+        List<Cliente> clientes = clienteService.obterTodos();
+        List<ClienteDTO> clienteDTOs = clienteMapper.toDtoList(clientes);
+        return new ResponseEntity<>(clienteDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/cliente/{id}")
-    @Operation(summary = "Obtendo cliente pelo ID", description = "Obtendo cliente pelo ID e retornando os dados")
-    public ResponseEntity<Cliente> obterCliente(@PathVariable Long id){
-        Optional<Cliente> cliente = clienteService.obterPorId(id);
-        return cliente.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    @Operation(summary = "Obtém cliente por ID", description = "Retorna cliente pelo ID")
+    public ResponseEntity<ClienteDTO> obterCliente(@PathVariable Long id) {
+        Cliente cliente = clienteService.obterPorId(id);
+        ClienteDTO clienteResposta = clienteMapper.toDto(cliente);
+        return ResponseEntity.ok(clienteResposta);
     }
 
-    @Operation(
-            description = "Atualiza um cliente e retorna as informações atualizadas",
-            summary = "Atualiza as informações de um cliente")
     @PutMapping("/cliente/{id}")
-    public ResponseEntity<ClienteDTO> atualizaCliente(@PathVariable Long id, @RequestBody ClienteDTO clienteDTO) {
-
-        // Converte o DTO em entidade
+    @Operation(summary = "Atualiza cliente", description = "Atualiza as informações de um cliente")
+    public ResponseEntity<ClienteDTO> atualizarCliente(@PathVariable Long id, @RequestBody ClienteDTO clienteDTO) {
         Cliente cliente = clienteMapper.toEntity(clienteDTO);
-
-        // Salva o cliente usando o serviço
         Cliente clienteAtualizado = clienteService.atualizarCliente(id, cliente);
-
-        // Converte a entidade salva de volta para DTO para retornar na resposta
         ClienteDTO clienteResposta = clienteMapper.toDto(clienteAtualizado);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(clienteResposta);
+        return ResponseEntity.ok(clienteResposta);
     }
 
-    @PostMapping("/{clienteId}/alugueis")
-    @Operation(summary = "Adicionando alugueis", description = "Adicionando alugueis para o cliente")
-    public ResponseEntity<Void> adicionarAluguel(@PathVariable Long clienteId, @RequestBody Aluguel aluguel) {
-        clienteService.adicionarAluguel(clienteId, aluguel);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("cliente/{id}")
+    @Operation(summary = "Deleta cliente", description = "Deleta cliente pelo ID")
+    public ResponseEntity<Void> deletarCliente(@PathVariable Long id) {
+        clienteService.excluirCliente(id);
+        return ResponseEntity.noContent().build();
     }
+
+    /*@GetMapping("cliente/{id}/alugueis")
+    @Operation(summary = "Exibe os aluguéis do usuário", description = "Exibe ao usuário todos os aluguéis relacionados ao seu id")
+    public ResponseEntity<List<Aluguel>> alugueisConfirmados(@PathVariable Long id) {
+        List<Aluguel> alugueis =  clienteService.alugueisConfirmados(id);
+        return ResponseEntity.ok(alugueis);
+    }*/
 }
