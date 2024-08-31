@@ -5,5 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AluguelRepository extends JpaRepository<Aluguel, Long> {}
 
+public interface AluguelRepository extends JpaRepository<Aluguel, Long> {
+    @Query("SELECT a FROM Aluguel a WHERE a.carro.id = :carroId AND " +
+            "((a.dataEntrega <= :dataFim AND a.dataDevolucao >= :dataInicio) OR " +
+            "(a.dataEntrega <= :dataInicio AND a.dataDevolucao >= :dataFim))")
+    List<Aluguel> findConflictingAlugueis(@Param("carroId") Long carroId,
+                                          @Param("dataInicio") LocalDate dataInicio,
+                                          @Param("dataFim") LocalDate dataFim);
+}
