@@ -31,9 +31,15 @@ public class ClienteService {
             Cliente clienteCadastrado = clienteRepository.save(cliente);
             logger.info("Cliente cadastrado com sucesso ID: {}", clienteCadastrado.getId());
             return clienteCadastrado;
-        } catch (Exception e) {
-            logger.error("Erro ao cadastrar cliente: {}", e.getMessage());
+        } catch (DataIntegrityViolationException e) {
+            logger.error("Erro de integridade de dados ao cadastrar cliente: {}", e.getMessage());
+            throw new DataIntegrityViolationException("Erro de integridade de dados: " + e.getMessage());
+        } catch (BusinessException e) {
+            logger.error("Erro de negócio ao cadastrar cliente: {}", e.getMessage());
             throw e;
+        } catch (Exception e) {
+            logger.error("Erro inesperado ao cadastrar cliente: {}", e.getMessage());
+            throw new RuntimeException("Erro inesperado ao cadastrar cliente", e);
         }
     }
 
@@ -43,11 +49,19 @@ public class ClienteService {
     }
 
     public Cliente obterPorId(Long id) {
-        return clienteRepository.findById(id)
-                .orElseThrow(() -> {
-                    logger.error("Cliente não encontrado ID: {}", id);
-                    return new BusinessException("Cliente não encontrado");
-                });
+        try {
+            return clienteRepository.findById(id)
+                    .orElseThrow(() -> {
+                        logger.error("Cliente não encontrado ID: {}", id);
+                        return new BusinessException("Cliente não encontrado");
+                    });
+        } catch (BusinessException e) {
+            logger.error("Erro de negócio ao obter cliente por ID: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            logger.error("Erro inesperado ao obter cliente por ID: {}", e.getMessage());
+            throw new RuntimeException("Erro inesperado ao obter cliente por ID", e);
+        }
     }
 
     @Transactional
@@ -59,9 +73,15 @@ public class ClienteService {
             Cliente clienteAtualizado = clienteRepository.save(clienteExistente);
             logger.info("Cliente atualizado com sucesso ID: {}", clienteAtualizado.getId());
             return clienteAtualizado;
-        } catch (Exception e) {
-            logger.error("Erro ao atualizar cliente: {}", e.getMessage());
+        } catch (DataIntegrityViolationException e) {
+            logger.error("Erro de integridade de dados ao atualizar cliente: {}", e.getMessage());
+            throw new DataIntegrityViolationException("Erro de integridade de dados: " + e.getMessage());
+        } catch (BusinessException e) {
+            logger.error("Erro de negócio ao atualizar cliente: {}", e.getMessage());
             throw e;
+        } catch (Exception e) {
+            logger.error("Erro inesperado ao atualizar cliente: {}", e.getMessage());
+            throw new RuntimeException("Erro inesperado ao atualizar cliente", e);
         }
     }
 
@@ -69,9 +89,10 @@ public class ClienteService {
         try {
             logger.info("Excluindo cliente por ID.");
             clienteRepository.deleteById(id);
+            logger.info("Cliente excluido com sucesso ID: {}", id);
         } catch (Exception e) {
-            logger.error("Erro ao excluir cliente: {}", e.getMessage());
-            throw e;
+            logger.error("Erro inesperado ao excluir cliente: {}", e.getMessage());
+            throw new RuntimeException("Erro inesperado ao excluir cliente", e);
         }
     }
 
