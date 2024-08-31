@@ -6,6 +6,7 @@ import br.edu.solutis.dev.trail.locadora.repository.ClienteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,12 +24,17 @@ public class ClienteService {
 
     @Transactional
     public Cliente salvarCliente(Cliente cliente) {
-        logger.info("Cadastrando novo cliente.");
-        validarCliente(cliente);
-        verificarExistencia(cliente);
-        Cliente clienteCadastrado = clienteRepository.save(cliente);
-        logger.info("Cliente cadastrado com sucesso ID: {}", clienteCadastrado.getId());
-        return clienteCadastrado;
+        try {
+            logger.info("Cadastrando novo cliente.");
+            validarCliente(cliente);
+            verificarExistencia(cliente);
+            Cliente clienteCadastrado = clienteRepository.save(cliente);
+            logger.info("Cliente cadastrado com sucesso ID: {}", clienteCadastrado.getId());
+            return clienteCadastrado;
+        } catch (Exception e) {
+            logger.error("Erro ao cadastrar cliente: {}", e.getMessage());
+            throw e;
+        }
     }
 
     public List<Cliente> obterTodos() {
@@ -38,22 +44,35 @@ public class ClienteService {
 
     public Cliente obterPorId(Long id) {
         return clienteRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("Cliente não encontrado"));
+                .orElseThrow(() -> {
+                    logger.error("Cliente não encontrado ID: {}", id);
+                    return new BusinessException("Cliente não encontrado");
+                });
     }
 
     @Transactional
     public Cliente atualizarCliente(Long id, Cliente clienteNovo) {
-        Cliente clienteExistente = obterPorId(id);
-        atualizarDados(clienteExistente, clienteNovo);
-        validarCliente(clienteExistente);
-        Cliente clienteAtualizado = clienteRepository.save(clienteExistente);
-        logger.info("Cliente atualizado com sucesso ID: {}", clienteAtualizado.getId());
-        return clienteAtualizado;
+        try {
+            Cliente clienteExistente = obterPorId(id);
+            atualizarDados(clienteExistente, clienteNovo);
+            validarCliente(clienteExistente);
+            Cliente clienteAtualizado = clienteRepository.save(clienteExistente);
+            logger.info("Cliente atualizado com sucesso ID: {}", clienteAtualizado.getId());
+            return clienteAtualizado;
+        } catch (Exception e) {
+            logger.error("Erro ao atualizar cliente: {}", e.getMessage());
+            throw e;
+        }
     }
 
     public void excluirCliente(Long id) {
-        logger.info("Excluindo cliente por ID.");
-        clienteRepository.deleteById(id);
+        try {
+            logger.info("Excluindo cliente por ID.");
+            clienteRepository.deleteById(id);
+        } catch (Exception e) {
+            logger.error("Erro ao excluir cliente: {}", e.getMessage());
+            throw e;
+        }
     }
 
     private void atualizarDados(Cliente clienteExistente, Cliente clienteNovo) {
@@ -88,13 +107,13 @@ public class ClienteService {
 
     private void verificarExistencia(Cliente cliente) {
         if (clienteRepository.existsByEmail(cliente.getEmail())) {
-            throw new BusinessException("Email já cadastrado");
+            throw new DataIntegrityViolationException("Email já cadastrado");
         }
         if (clienteRepository.existsByCpf(cliente.getCpf())) {
-            throw new BusinessException("CPF já cadastrado");
+            throw new DataIntegrityViolationException("CPF já cadastrado");
         }
         if (clienteRepository.existsByCnh(cliente.getCnh())) {
-            throw new BusinessException("CNH já cadastrada");
+            throw new DataIntegrityViolationException("CNH já cadastrada");
         }
     }
 }

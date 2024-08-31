@@ -1,28 +1,30 @@
 package br.edu.solutis.dev.trail.locadora.model.entity;
 
-import br.edu.solutis.dev.trail.locadora.model.entity.Aluguel;
-import br.edu.solutis.dev.trail.locadora.model.entity.Cliente;
-import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @ToString
 @Entity
+@Table(name= "tb_carrinho")
 public class Carrinho {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private LocalDateTime dataCriacao;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Aluguel> itens;
+    @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL)
+    private List<Aluguel> alugueis;
 
-    @ManyToOne
-    private Cliente cliente;
+    /*@OneToMany
+    private Carro carroSelecionado;
 
-    private Double valorTotal;
+    public void limparCarrinho() {
+        carroSelecionado = null;
+    }*/
 
 }

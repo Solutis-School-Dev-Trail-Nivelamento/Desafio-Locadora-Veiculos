@@ -1,9 +1,13 @@
-/* package br.edu.solutis.dev.trail.locadora.service;
+package br.edu.solutis.dev.trail.locadora.service;
 
-import br.edu.solutis.dev.trail.locadora.exceptions.BusinessException;
+import br.edu.solutis.dev.trail.locadora.exceptions.NotFoundException;
 import br.edu.solutis.dev.trail.locadora.model.entity.Aluguel;
+import br.edu.solutis.dev.trail.locadora.model.entity.Carro;
 import br.edu.solutis.dev.trail.locadora.model.entity.Cliente;
+import br.edu.solutis.dev.trail.locadora.repository.AluguelRepository;
+import br.edu.solutis.dev.trail.locadora.repository.CarroRepository;
 import br.edu.solutis.dev.trail.locadora.repository.ClienteRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,40 +15,63 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Calendar;
+import java.util.List;
 
 @Service
-public class AluguelService{
+public class AluguelService {
 
     private static final Logger logger = LoggerFactory.getLogger(AluguelService.class);
 
     @Autowired
-    private ClienteRepository AluguelRepository;
+    private AluguelRepository aluguelRepository;
+
+    @Autowired
+    private CarroRepository carroRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     @Valid
     @Transactional
-    public Cliente salvarAluguel(Aluguel aluguel) {
+    public Aluguel criarAluguel(Long clienteID, Long carroID, LocalDate dataEntrega, LocalDate dataDevolucao) {
+        Cliente cliente = clienteRepository.findById(clienteID)
+                .orElseThrow(() -> new NotFoundException("Cliente não encontrado"));
+        Carro carroSelecionado = carroRepository.findById(carroID)
+                .orElseThrow(() -> new NotFoundException("Carro não encontrado."));
 
-        logger.info("Cadastrando novo Aluguel.");
+        Aluguel aluguel = new Aluguel(cliente, carroSelecionado, dataEntrega, dataDevolucao);
+        aluguel.setValorTotal(aluguel.calcularValorTotal());
+        aluguel.setQuantidadeDias(aluguel.calcularQuantidadeDias());
+        aluguelRepository.save(aluguel);
 
-        validarAluguel(aluguel);
-        verificarExistencia(aluguel);
-
-        Aluguel aluguelCadastrado = aluguelRepository.save(aluguel);
-        logger.info("Aluguel cadastrado com sucesso ID: {}", aluguelCadastrado.getId());
-        return aluguelCadastrado;
+        logger.info("Aluguel cadastrado com sucesso ID: {}", aluguel.getID());
+        return aluguel;
     }
 
-    public Optional<Aluguel> obterPorId(Long aluguelId){
-        return aluguelRepository.findById(aluguelId);
+    @Transactional(readOnly = true)
+    public List<Aluguel> obterTodos() {
+        return this.aluguelRepository.findAll();
     }
 
     @Transactional
-    public void adicionarAluguel(Long clienteId, Aluguel aluguel) {
-        Cliente cliente = clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+    public Aluguel atualizarAluguel(Long aluguelId, LocalDate dataEntrega, LocalDate dataDevolucao) {
+        Aluguel aluguel = aluguelRepository.findById(aluguelId)
+                .orElseThrow(() -> new EntityNotFoundException("Aluguel não encontrado"));
 
-    */
+        aluguel.setDataEntrega(dataEntrega);
+        aluguel.setDataDevolucao(dataDevolucao);
+        aluguel.setValorTotal(aluguel.calcularValorTotal());
+        aluguel.setQuantidadeDias(aluguel.calcularQuantidadeDias());
+
+        return aluguelRepository.save(aluguel);
+    }
+
+    @Transactional
+    public void deletarAluguel(Long aluguelId) {
+        Aluguel aluguel = aluguelRepository.findById(aluguelId)
+                .orElseThrow(() -> new EntityNotFoundException("Aluguel não encontrado"));
+
+        aluguelRepository.delete(aluguel);
+    }
+}

@@ -15,6 +15,7 @@ import java.time.LocalDate;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo", length = 10, discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("P")
+@Table(name = "tb_pessoa")
 public class Pessoa implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,4 +42,15 @@ public class Pessoa implements Serializable {
     @Column(length = 10)
     private Sexo sexo;
 
+    // Construtor padrão
+    public Pessoa() {}
+
+    // Construtor com parâmetros
+    public Pessoa(String nome, String cpf, String email, LocalDate dataNascimento, Sexo sexo) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.email = email;
+        this.dataNascimento = dataNascimento;
+        this.sexo = sexo;
+    }
 }

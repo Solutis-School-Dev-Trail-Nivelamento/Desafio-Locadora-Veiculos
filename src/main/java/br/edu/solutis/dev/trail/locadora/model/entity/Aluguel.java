@@ -7,6 +7,7 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 
 @Data
@@ -14,38 +15,53 @@ import java.util.Calendar;
 @Entity
 @Table(name = "tb_aluguel")
 public class Aluguel implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long ID;
 
-    @Column(nullable = false)
-    private Calendar dataPedido;
+    @ManyToOne
+    @JoinColumn(name = "carro_id")
+    private Carro carro;
 
-    @Column(nullable = false)
-    private LocalDate dataEntrega;
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
 
-    @Column(nullable = false)
-    private LocalDate dataDevolucao;
-
-    @Column(nullable = false)
-    private BigDecimal valorTotal;
-
-    @Column(length = 1, nullable = false)
-    private String tipo;
-
-    @Column(length = 100, nullable = false)
-    private String termos;
-
-   /* @OneToOne
+  /*  @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "apolice_id")
     private ApoliceSeguro apoliceSeguro;*/
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id") // Relacionamento muitos-para-um com Motorista
-    private Cliente cliente;
+    @JoinColumn(name = "carrinho_id")
+    private Carrinho carrinho;
 
-   @ManyToOne
-   @JoinColumn(name = "carro_id", nullable = false) // Relacionamento muitos-para-um com Carro
-   private Carro carro;
+    private Calendar dataPedido;
+    private LocalDate dataEntrega;
+    private LocalDate dataDevolucao;
+    private BigDecimal valorTotal;
+    private int quantidadeDias;
+
+    public Aluguel() {
+    }
+
+    public Aluguel(Cliente cliente, Carro carro, LocalDate dataEntrega, LocalDate dataDevolucao) {
+        this.cliente = cliente;
+        this.carro = carro;
+        this.dataPedido = Calendar.getInstance();
+        this.dataEntrega = dataEntrega;
+        this.dataDevolucao = dataDevolucao;
+        this.quantidadeDias = calcularQuantidadeDias();
+        this.valorTotal = calcularValorTotal();
+    }
+
+    public int calcularQuantidadeDias() {
+        return (int) ChronoUnit.DAYS.between(dataEntrega, dataDevolucao);
+    }
+
+    public BigDecimal calcularValorTotal() {
+        int quantidadeDias = calcularQuantidadeDias();
+        BigDecimal valorDiaria = carro.getValorDiaria();
+        return valorDiaria.multiply(BigDecimal.valueOf(quantidadeDias));
+    }
 }
