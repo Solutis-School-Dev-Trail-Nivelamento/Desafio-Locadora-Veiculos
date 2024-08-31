@@ -13,6 +13,5 @@ public class AluguelDTO {
     private LocalDate dataDevolucao;
     private int quantidadeDias;
     private BigDecimal valorTotal;
-    private String termos;
 
 }
