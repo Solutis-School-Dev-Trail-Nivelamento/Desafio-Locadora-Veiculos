@@ -36,30 +36,16 @@ public class AluguelService {
     @Autowired
     private CarrinhoRepository carrinhoRepository;
 
-    public Carrinho obterCarrinho(Long clienteId) {
-        Cliente cliente = clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new NotFoundException("Cliente não encontrado"));
-
-        Optional<Carrinho> carrinhoExistente = carrinhoRepository.findByClienteId(clienteId);
-
-        if (carrinhoExistente.isPresent()) {
-            return carrinhoExistente.get();
-        }
-
-        Carrinho novoCarrinho = new Carrinho();
-        novoCarrinho.setCliente(cliente);
-        novoCarrinho.setDataCriacao(LocalDate.now());
-        return carrinhoRepository.save(novoCarrinho);
-    }
-
-
-    @Valid
     @Transactional
     public Aluguel criarAluguel(Long clienteID, Long carroID, LocalDate dataEntrega, LocalDate dataDevolucao) {
         Cliente cliente = clienteRepository.findById(clienteID)
                 .orElseThrow(() -> new NotFoundException("Cliente não encontrado"));
         Carro carroSelecionado = carroRepository.findById(carroID)
-                .orElseThrow(() -> new NotFoundException("Carro não encontrado."));
+                .orElseThrow(() -> new NotFoundException("Carro não encontrado"));
+
+        if (!carroDisponivel(carroSelecionado.getId(), dataEntrega, dataDevolucao)) {
+            throw new NotFoundException("Carro não disponível para o período selecionado");
+        }
 
         Aluguel aluguel = new Aluguel(cliente, carroSelecionado, dataEntrega, dataDevolucao);
         aluguel.setDataPedido(LocalDateTime.now());
@@ -67,12 +53,22 @@ public class AluguelService {
         aluguel.setCarrinho(obterCarrinho(clienteID));
         aluguel.setValorTotal(aluguel.calcularValorTotal());
         aluguel.setQuantidadeDias(aluguel.calcularQuantidadeDias());
+
         aluguelRepository.save(aluguel);
 
         logger.info("Aluguel cadastrado com sucesso ID: {}", aluguel.getID());
         return aluguel;
     }
 
+    @Transactional
+    public boolean carroDisponivel(Long carroId, LocalDate dataInicio, LocalDate dataFim) {
+        return aluguelRepository.findConflictingAlugueis(carroId, dataInicio, dataFim).isEmpty();
+    }
+
+    private Carrinho obterCarrinho(Long clienteID) {
+        return carrinhoRepository.findByClienteId(clienteID)
+                .orElseThrow(() -> new NotFoundException("Carrinho não encontrado para o cliente ID: " + clienteID));
+    }
 
     @Transactional(readOnly = true)
     public List<Aluguel> obterTodos() {
