@@ -1,5 +1,7 @@
 package br.edu.solutis.dev.trail.locadora.repository;
 
+import java.time.LocalDate; 
+import java.util.List; 
 import br.edu.solutis.dev.trail.locadora.model.entity.Aluguel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
