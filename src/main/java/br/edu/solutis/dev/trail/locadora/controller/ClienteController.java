@@ -35,22 +35,22 @@ public class ClienteController {
 
     @GetMapping("/clientes")
     @Operation(summary = "Obtém todos clientes", description = "Retorna a informação com todos clientes cadastrados")
-    public ResponseEntity<List<Cliente>> findAll() {
-        List<Cliente> clientes = clienteService.obterTodos();
+    public ResponseEntity<List<ClienteDTO>> findAll() {
+        List<ClienteDTO> clientes = clienteService.obterTodos();
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
     @GetMapping("/cliente/{id}")
     @Operation(summary = "Obtém um cliente pelo ID", description = "Retorna cliente pelo ID")
-    public ResponseEntity<Cliente> findById(@PathVariable Long id) {
-        Cliente cliente = clienteService.obterPorId(id);
+    public ResponseEntity<ClienteDTO> findById(@PathVariable Long id) {
+        ClienteDTO cliente = clienteService.obterPorId(id);
         return ResponseEntity.ok(cliente);
     }
 
     @PutMapping("/cliente/{id}")
     @Operation(summary = "Atualiza um cliente pelo ID", description = "Atualiza as informações de um cliente")
-    public ResponseEntity<Cliente> update(@PathVariable Long id, @RequestBody Cliente cliente) {
-        Cliente clienteAtualizado = clienteService.atualizarCliente(id, cliente);
+    public ResponseEntity<ClienteDTO> update(@PathVariable Long id, @RequestBody ClienteDTO clienteDTO) {
+        ClienteDTO clienteAtualizado = clienteService.atualizarCliente(id, clienteDTO);
         return ResponseEntity.ok(clienteAtualizado);
     }
 

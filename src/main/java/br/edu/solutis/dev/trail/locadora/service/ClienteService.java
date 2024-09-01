@@ -3,10 +3,8 @@ package br.edu.solutis.dev.trail.locadora.service;
 import br.edu.solutis.dev.trail.locadora.exceptions.BusinessException;
 import br.edu.solutis.dev.trail.locadora.mappers.ClienteMapper;
 import br.edu.solutis.dev.trail.locadora.model.dto.ClienteDTO;
-import br.edu.solutis.dev.trail.locadora.model.entity.Aluguel;
-import br.edu.solutis.dev.trail.locadora.model.entity.AluguelStatus;
 import br.edu.solutis.dev.trail.locadora.model.entity.Cliente;
-import br.edu.solutis.dev.trail.locadora.repository.AluguelRepository;
+import br.edu.solutis.dev.trail.locadora.model.entity.Sexo;
 import br.edu.solutis.dev.trail.locadora.repository.ClienteRepository;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -27,9 +25,6 @@ public class ClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
-
-    @Autowired
-    private AluguelRepository aluguelRepository;
 
     @Autowired
     private ClienteMapper clienteMapper;
@@ -56,18 +51,21 @@ public class ClienteService {
         }
     }
 
-    public List<Cliente> obterTodos() {
+    public List<ClienteDTO> obterTodos() {
         logger.info("Obtendo todos os clientes.");
-        return clienteRepository.findAll();
+        List<Cliente> clientes = clienteRepository.findAll();
+        return clienteMapper.toDtoList(clientes);
     }
 
-    public Cliente obterPorId(Long id) {
+
+    public ClienteDTO obterPorId(Long id) {
         try {
-            return clienteRepository.findById(id)
+            Cliente cliente = clienteRepository.findById(id)
                     .orElseThrow(() -> {
                         logger.error("Cliente não encontrado ID: {}", id);
                         return new BusinessException("Cliente não encontrado");
                     });
+            return clienteMapper.toDto(cliente);
         } catch (BusinessException e) {
             logger.error("Erro de negócio ao obter cliente por ID: {}", e.getMessage());
             throw e;
@@ -78,14 +76,19 @@ public class ClienteService {
     }
 
     @Transactional
-    public Cliente atualizarCliente(Long id, Cliente clienteNovo) {
+    public ClienteDTO atualizarCliente(Long id, ClienteDTO clienteNovoDTO) {
         try {
-            Cliente clienteExistente = obterPorId(id);
+            Cliente clienteExistente = clienteRepository.findById(id)
+                    .orElseThrow(() -> {
+                        logger.error("Cliente não encontrado ID: {}", id);
+                        return new BusinessException("Cliente não encontrado");
+                    });
+            Cliente clienteNovo = clienteMapper.toEntity(clienteNovoDTO);
             atualizarDados(clienteExistente, clienteNovo);
             validarCliente(clienteExistente);
             Cliente clienteAtualizado = clienteRepository.save(clienteExistente);
             logger.info("Cliente atualizado com sucesso ID: {}", clienteAtualizado.getId());
-            return clienteAtualizado;
+            return clienteMapper.toDto(clienteAtualizado);
         } catch (DataIntegrityViolationException e) {
             logger.error("Erro de integridade de dados ao atualizar cliente: {}", e.getMessage());
             throw new DataIntegrityViolationException("Erro de integridade de dados: " + e.getMessage());
@@ -98,6 +101,7 @@ public class ClienteService {
         }
     }
 
+
     public void excluirCliente(Long id) {
         try {
             logger.info("Excluindo cliente por ID.");
@@ -109,14 +113,13 @@ public class ClienteService {
         }
     }
 
-    private void atualizarDados(Cliente clienteExistente, Cliente clienteNovo) {
-        clienteExistente.setNome(clienteNovo.getNome());
-        clienteExistente.setCpf(clienteNovo.getCpf());
-        clienteExistente.setEmail(clienteNovo.getEmail());
-        clienteExistente.setDataNascimento(clienteNovo.getDataNascimento());
-        clienteExistente.setSexo(clienteNovo.getSexo());
-        clienteExistente.setCnh(clienteNovo.getCnh());
+    private void atualizarDados(Cliente clienteExistente, Cliente clienteNovoDTO) {
+        clienteExistente.setNome(clienteNovoDTO.getNome());
+        clienteExistente.setEmail(clienteNovoDTO.getEmail());
+        clienteExistente.setDataNascimento(clienteNovoDTO.getDataNascimento());
+        clienteExistente.setSexo((clienteNovoDTO.getSexo()));
     }
+
 
     private void validarCliente(Cliente cliente) {
         if (cliente.getNome() == null || cliente.getNome().isEmpty()) {
