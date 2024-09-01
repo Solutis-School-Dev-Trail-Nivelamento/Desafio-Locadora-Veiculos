@@ -40,4 +40,16 @@ public class Carro {
             inverseJoinColumns = @JoinColumn(name = "acessorio_id")
     )
     private List<Acessorio> acessorios = new ArrayList<>();
+
+    // Construtor padrão
+    public Carro() {}
+
+    // Construtor com parâmetros
+    public Carro(String placa, String chassi, String cor, BigDecimal valorDiaria, ModeloCarro modelo) {
+        this.placa = placa;
+        this.chassi = chassi;
+        this.cor = cor;
+        this.valorDiaria = valorDiaria;
+        this.modelo = modelo;
+    }
 }
