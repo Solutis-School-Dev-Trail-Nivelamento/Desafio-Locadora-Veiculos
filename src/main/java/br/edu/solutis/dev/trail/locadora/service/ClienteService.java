@@ -1,11 +1,14 @@
 package br.edu.solutis.dev.trail.locadora.service;
 
 import br.edu.solutis.dev.trail.locadora.exceptions.BusinessException;
+import br.edu.solutis.dev.trail.locadora.mappers.ClienteMapper;
+import br.edu.solutis.dev.trail.locadora.model.dto.ClienteDTO;
 import br.edu.solutis.dev.trail.locadora.model.entity.Aluguel;
 import br.edu.solutis.dev.trail.locadora.model.entity.AluguelStatus;
 import br.edu.solutis.dev.trail.locadora.model.entity.Cliente;
 import br.edu.solutis.dev.trail.locadora.repository.AluguelRepository;
 import br.edu.solutis.dev.trail.locadora.repository.ClienteRepository;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +31,19 @@ public class ClienteService {
     @Autowired
     private AluguelRepository aluguelRepository;
 
+    @Autowired
+    private ClienteMapper clienteMapper;
+
     @Transactional
-    public Cliente salvarCliente(Cliente cliente) {
+    public ClienteDTO salvarCliente(@Valid ClienteDTO clienteDTO) {
         try {
             logger.info("Cadastrando novo cliente.");
+            Cliente cliente = clienteMapper.toEntity(clienteDTO);
             validarCliente(cliente);
             verificarExistencia(cliente);
             Cliente clienteCadastrado = clienteRepository.save(cliente);
             logger.info("Cliente cadastrado com sucesso ID: {}", clienteCadastrado.getId());
-            return clienteCadastrado;
+            return clienteMapper.toDto(clienteCadastrado);
         } catch (DataIntegrityViolationException e) {
             logger.error("Erro de integridade de dados ao cadastrar cliente: {}", e.getMessage());
             throw new DataIntegrityViolationException("Erro de integridade de dados: " + e.getMessage());
@@ -143,8 +150,4 @@ public class ClienteService {
             throw new DataIntegrityViolationException("CNH já cadastrada");
         }
     }
-    public List<Aluguel> buscarAlugueisConfirmados(Long clienteId) {
-        return aluguelRepository.findByClienteIdAndStatus(clienteId, AluguelStatus.CONFIRMADO);
-    }
-
 }

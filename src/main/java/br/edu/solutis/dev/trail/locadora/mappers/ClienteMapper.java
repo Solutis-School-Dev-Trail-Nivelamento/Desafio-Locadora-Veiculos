@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ClienteMapper {
-
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "alugueis", ignore = true) // Ignora o mapeamento de alugueis
     Cliente toEntity(ClienteDTO dto);
 
