@@ -22,10 +22,10 @@ public class CarrinhoController {
         return carrinhoService.criarCarrinho();
     }
 
-    /*@PostMapping("/{carrinhoId}/adicionar/{veiculoId}/{clienteId}")
-    public Aluguel adicionarVeiculo(@PathVariable Long carrinhoId, @PathVariable Long veiculoId, @PathVariable Long clienteId, @RequestParam LocalDate dataInicio, @RequestParam LocalDate dataFim) {
-        return carrinhoService.adicionarCarro(carrinhoId, veiculoId, clienteId, dataInicio, dataFim);
-    }*/
+    @PostMapping("/{carrinhoId}/adicionar/{veiculoId}/{clienteId}")
+    public Carrinho adicionarVeiculo(@PathVariable Long carrinhoId, @PathVariable Long veiculoId, @PathVariable Long clienteId, @RequestParam LocalDate dataInicio, @RequestParam LocalDate dataFim) {
+        return carrinhoService.adicionarVeiculo(carrinhoId, veiculoId, clienteId, dataInicio, dataFim);
+    }
 
     @PostMapping("/{carrinhoId}/confirmar")
     public Carrinho confirmarReserva(@PathVariable Long carrinhoId) {
