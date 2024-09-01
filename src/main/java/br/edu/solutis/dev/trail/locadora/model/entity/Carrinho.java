@@ -1,5 +1,6 @@
 package br.edu.solutis.dev.trail.locadora.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Setter;

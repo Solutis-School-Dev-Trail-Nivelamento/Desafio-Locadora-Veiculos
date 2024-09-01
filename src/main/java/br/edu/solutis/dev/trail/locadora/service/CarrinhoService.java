@@ -31,14 +31,14 @@ public class CarrinhoService {
     /*@Autowired
     private EmailService emailService;*/
 
-    @Transactional
+    /*@Transactional
     public Carrinho criarCarrinho() {
         logger.info("Criando novo carrinho de aluguel.");
         Carrinho carrinho = new Carrinho();
         carrinho.setDataCriacao(LocalDate.now());
         carrinho.setAlugueis(new ArrayList<>());
         return carrinhoRepository.save(carrinho);
-    }
+    }*/
 
     @Transactional
     public Carrinho adicionarVeiculo(Long carrinhoId, Long veiculoId, Long clienteId, LocalDate dataInicio, LocalDate dataFim) {

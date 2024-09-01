@@ -1,5 +1,6 @@
 package br.edu.solutis.dev.trail.locadora.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Setter;
@@ -30,6 +31,7 @@ public class Aluguel implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "carrinho_id", nullable = false)
+    @JsonIgnore
     private Carrinho carrinho;
 
     private LocalDateTime dataPedido;

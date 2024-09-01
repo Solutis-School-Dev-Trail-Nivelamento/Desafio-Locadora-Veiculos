@@ -4,30 +4,33 @@ import br.edu.solutis.dev.trail.locadora.model.entity.Carrinho;
 import br.edu.solutis.dev.trail.locadora.service.CarrinhoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
 
 @RestController
-@RequestMapping("/carrinho")
+@RequestMapping("api/carrinho")
 @Tag(name = "Carrinho")
 public class CarrinhoController {
     @Autowired
     private CarrinhoService carrinhoService;
 
-    @PostMapping("/criar")
+   /* @PostMapping("/criar")
     public Carrinho criarCarrinho() {
         return carrinhoService.criarCarrinho();
+    }*/
+
+    @PostMapping("/{carrinhoId}/adicionar-veiculo")
+    public ResponseEntity<Carrinho> adicionarVeiculo(@PathVariable Long carrinhoId, @RequestParam Long veiculoId, @RequestParam Long clienteId, @RequestParam LocalDate dataInicio, @RequestParam LocalDate dataFim) {
+        Carrinho carrinho = carrinhoService.adicionarVeiculo(carrinhoId, veiculoId, clienteId, dataInicio, dataFim);
+        return ResponseEntity.ok(carrinho);
     }
 
-    @PostMapping("/{carrinhoId}/adicionar/{veiculoId}/{clienteId}")
-    public Carrinho adicionarVeiculo(@PathVariable Long carrinhoId, @PathVariable Long veiculoId, @PathVariable Long clienteId, @RequestParam LocalDate dataInicio, @RequestParam LocalDate dataFim) {
-        return carrinhoService.adicionarVeiculo(carrinhoId, veiculoId, clienteId, dataInicio, dataFim);
-    }
-
-    @PostMapping("/{carrinhoId}/confirmar")
-    public Carrinho confirmarReserva(@PathVariable Long carrinhoId) {
-        return carrinhoService.confirmarReserva(carrinhoId);
+    @PostMapping("/{carrinhoId}/confirmar-reserva")
+    public ResponseEntity<Carrinho> confirmarReserva(@PathVariable Long carrinhoId) {
+        Carrinho carrinho = carrinhoService.confirmarReserva(carrinhoId);
+        return ResponseEntity.ok(carrinho);
     }
 }
