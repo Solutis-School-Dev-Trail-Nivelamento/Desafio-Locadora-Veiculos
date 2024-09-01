@@ -2,9 +2,10 @@ package br.edu.solutis.dev.trail.locadora.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -15,7 +16,13 @@ public class Carrinho {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime dataCriacao;
+
+    private LocalDate dataCriacao;
+
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente;
 
     @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL)
     private List<Aluguel> alugueis;

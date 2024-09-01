@@ -12,10 +12,10 @@ import java.time.LocalDate;
 @Configuration
 public class DataLoader {
 
- /*  @Bean
+/*  @Bean
     CommandLineRunner initDatabase(ClienteRepository clienteRepository, CarroRepository carroRepository, AluguelRepository aluguelRepository) {
         return args -> {
-            // Criando clientes
+           // Criando clientes
             Cliente cliente1 = new Cliente("Marina Silva", "12345678903", "marina.silva@example.com", LocalDate.of(1990, 1, 1), Sexo.FEMININO, "123456788");
             Cliente cliente2 = new Cliente("Jose Silva", "12345678902", "jose.silva@example.com", LocalDate.of(1990, 1, 1), Sexo.MASCULINO, "123456782");
             Cliente cliente3 = new Cliente("Maria Silva", "12345678901", "maria.silva@example.com", LocalDate.of(1990, 1, 1), Sexo.FEMININO, "123456783");
@@ -24,6 +24,10 @@ public class DataLoader {
             clienteRepository.save(cliente2);
             clienteRepository.save(cliente3);
             clienteRepository.save(cliente4);
+
+           Fabricante fabricante = new Fabricante();
+            fabricante.setId(2L);
+            fabricante.setNome("Honda");
 
 
             ModeloCarro modelo = new ModeloCarro(); // Supondo que você tenha uma entidade ModeloCarro

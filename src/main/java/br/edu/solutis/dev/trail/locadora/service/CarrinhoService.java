@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.time.LocalDate;
 
@@ -36,7 +35,7 @@ public class CarrinhoService {
     public Carrinho criarCarrinho() {
         logger.info("Criando novo carrinho de aluguel.");
         Carrinho carrinho = new Carrinho();
-        carrinho.setDataCriacao(LocalDateTime.now());
+        carrinho.setDataCriacao(LocalDate.now());
         carrinho.setAlugueis(new ArrayList<>());
         return carrinhoRepository.save(carrinho);
     }
@@ -58,7 +57,7 @@ public class CarrinhoService {
         aluguel.setCarro(carro);
         aluguel.setCliente(cliente);
         aluguel.setCarrinho(carrinho);
-        aluguel.setDataPedido(Calendar.getInstance());
+        aluguel.setDataPedido(LocalDateTime.now());
         aluguel.setDataEntrega(dataInicio);
         aluguel.setDataDevolucao(dataFim);
         aluguel.setQuantidadeDias(aluguel.calcularQuantidadeDias());

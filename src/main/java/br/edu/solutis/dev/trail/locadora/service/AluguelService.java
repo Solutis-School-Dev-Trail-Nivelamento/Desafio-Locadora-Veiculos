@@ -1,11 +1,9 @@
 package br.edu.solutis.dev.trail.locadora.service;
 
 import br.edu.solutis.dev.trail.locadora.exceptions.NotFoundException;
-import br.edu.solutis.dev.trail.locadora.model.entity.Aluguel;
-import br.edu.solutis.dev.trail.locadora.model.entity.AluguelStatus;
-import br.edu.solutis.dev.trail.locadora.model.entity.Carro;
-import br.edu.solutis.dev.trail.locadora.model.entity.Cliente;
+import br.edu.solutis.dev.trail.locadora.model.entity.*;
 import br.edu.solutis.dev.trail.locadora.repository.AluguelRepository;
+import br.edu.solutis.dev.trail.locadora.repository.CarrinhoRepository;
 import br.edu.solutis.dev.trail.locadora.repository.CarroRepository;
 import br.edu.solutis.dev.trail.locadora.repository.ClienteRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AluguelService {
@@ -33,6 +33,26 @@ public class AluguelService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private CarrinhoRepository carrinhoRepository;
+
+    public Carrinho obterCarrinho(Long clienteId) {
+        Cliente cliente = clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new NotFoundException("Cliente não encontrado"));
+
+        Optional<Carrinho> carrinhoExistente = carrinhoRepository.findByClienteId(clienteId);
+
+        if (carrinhoExistente.isPresent()) {
+            return carrinhoExistente.get();
+        }
+
+        Carrinho novoCarrinho = new Carrinho();
+        novoCarrinho.setCliente(cliente);
+        novoCarrinho.setDataCriacao(LocalDate.now());
+        return carrinhoRepository.save(novoCarrinho);
+    }
+
+
     @Valid
     @Transactional
     public Aluguel criarAluguel(Long clienteID, Long carroID, LocalDate dataEntrega, LocalDate dataDevolucao) {
@@ -42,6 +62,9 @@ public class AluguelService {
                 .orElseThrow(() -> new NotFoundException("Carro não encontrado."));
 
         Aluguel aluguel = new Aluguel(cliente, carroSelecionado, dataEntrega, dataDevolucao);
+        aluguel.setDataPedido(LocalDateTime.now());
+        aluguel.setStatus(AluguelStatus.PENDENTE);
+        aluguel.setCarrinho(obterCarrinho(clienteID));
         aluguel.setValorTotal(aluguel.calcularValorTotal());
         aluguel.setQuantidadeDias(aluguel.calcularQuantidadeDias());
         aluguelRepository.save(aluguel);
@@ -49,6 +72,7 @@ public class AluguelService {
         logger.info("Aluguel cadastrado com sucesso ID: {}", aluguel.getID());
         return aluguel;
     }
+
 
     @Transactional(readOnly = true)
     public List<Aluguel> obterTodos() {
@@ -79,5 +103,4 @@ public class AluguelService {
     public List<Aluguel> buscarAlugueisConfirmados(Long clienteId) {
         return aluguelRepository.findByClienteIdAndStatus(clienteId, AluguelStatus.CONFIRMADO);
     }
-
 }

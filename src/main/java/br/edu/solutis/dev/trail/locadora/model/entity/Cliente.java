@@ -1,5 +1,6 @@
 package br.edu.solutis.dev.trail.locadora.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,6 +20,7 @@ public class Cliente extends Pessoa {
     private String cnh;
 
     @OneToMany(mappedBy = "cliente", fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Aluguel> alugueis;
 
     // Construtor padrão

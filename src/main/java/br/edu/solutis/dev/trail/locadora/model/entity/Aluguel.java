@@ -8,8 +8,8 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
 
 @Data
 @ToString
@@ -28,16 +28,11 @@ public class Aluguel implements Serializable {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-  /*  @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "apolice_id")
-    private ApoliceSeguro apoliceSeguro;*/
-
     @ManyToOne
-    @JoinColumn(name = "carrinho_id")
+    @JoinColumn(name = "carrinho_id", nullable = false)
     private Carrinho carrinho;
 
-    private Calendar dataPedido;
+    private LocalDateTime dataPedido;
     private LocalDate dataEntrega;
     private LocalDate dataDevolucao;
     private BigDecimal valorTotal;
@@ -53,7 +48,7 @@ public class Aluguel implements Serializable {
     public Aluguel(Cliente cliente, Carro carro, LocalDate dataEntrega, LocalDate dataDevolucao) {
         this.cliente = cliente;
         this.carro = carro;
-        this.dataPedido = Calendar.getInstance();
+        this.dataPedido = LocalDateTime.now();
         this.dataEntrega = dataEntrega;
         this.dataDevolucao = dataDevolucao;
         this.quantidadeDias = calcularQuantidadeDias();
@@ -70,3 +65,4 @@ public class Aluguel implements Serializable {
         return valorDiaria.multiply(BigDecimal.valueOf(quantidadeDias));
     }
 }
+

@@ -59,6 +59,7 @@ public class AcessorioController {
             AcessorioDTO createdAcessorio = acessorioService.save(acessorioDTO);
             return ResponseEntity.status(201).body(createdAcessorio);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(null); // Customize as needed
         }
     }
