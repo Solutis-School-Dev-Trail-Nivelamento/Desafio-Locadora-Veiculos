@@ -1,6 +1,5 @@
 package br.edu.solutis.dev.trail.locadora.controller;
 
-import br.edu.solutis.dev.trail.locadora.model.entity.Aluguel;
 import br.edu.solutis.dev.trail.locadora.model.entity.Carrinho;
 import br.edu.solutis.dev.trail.locadora.service.CarrinhoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,7 +10,7 @@ import java.time.LocalDate;
 
 
 @RestController
-@RequestMapping("/api/carrinho")
+@RequestMapping("/carrinho")
 @Tag(name = "Carrinho")
 public class CarrinhoController {
     @Autowired
