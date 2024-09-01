@@ -13,7 +13,6 @@ import java.util.List;
 @Entity
 @Table(name= "tb_carro")
 public class Carro {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -41,6 +40,7 @@ public class Carro {
             inverseJoinColumns = @JoinColumn(name = "acessorio_id")
     )
     private List<Acessorio> acessorios = new ArrayList<>();
+
 
     // Construtor padrão
     public Carro() {}
