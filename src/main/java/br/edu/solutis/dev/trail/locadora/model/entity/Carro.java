@@ -11,6 +11,7 @@ import java.util.List;
 @Data
 @ToString
 @Entity
+@Table(name= "tb_carro")
 public class Carro {
 
     @Id
@@ -35,7 +36,7 @@ public class Carro {
 
     @ManyToMany
     @JoinTable(
-            name = "carro_acessorio",
+            name = "tb_carro_acessorio",
             joinColumns = @JoinColumn(name = "carro_id"),
             inverseJoinColumns = @JoinColumn(name = "acessorio_id")
     )

@@ -1,7 +1,10 @@
 package br.edu.solutis.dev.trail.locadora.service;
 
 import br.edu.solutis.dev.trail.locadora.exceptions.BusinessException;
+import br.edu.solutis.dev.trail.locadora.model.entity.Aluguel;
+import br.edu.solutis.dev.trail.locadora.model.entity.AluguelStatus;
 import br.edu.solutis.dev.trail.locadora.model.entity.Cliente;
+import br.edu.solutis.dev.trail.locadora.repository.AluguelRepository;
 import br.edu.solutis.dev.trail.locadora.repository.ClienteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +24,9 @@ public class ClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private AluguelRepository aluguelRepository;
 
     @Transactional
     public Cliente salvarCliente(Cliente cliente) {
@@ -137,4 +143,8 @@ public class ClienteService {
             throw new DataIntegrityViolationException("CNH já cadastrada");
         }
     }
+    public List<Aluguel> buscarAlugueisConfirmados(Long clienteId) {
+        return aluguelRepository.findByClienteIdAndStatus(clienteId, AluguelStatus.CONFIRMADO);
+    }
+
 }

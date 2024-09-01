@@ -2,6 +2,7 @@ package br.edu.solutis.dev.trail.locadora.service;
 
 import br.edu.solutis.dev.trail.locadora.exceptions.NotFoundException;
 import br.edu.solutis.dev.trail.locadora.model.entity.Aluguel;
+import br.edu.solutis.dev.trail.locadora.model.entity.AluguelStatus;
 import br.edu.solutis.dev.trail.locadora.model.entity.Carro;
 import br.edu.solutis.dev.trail.locadora.model.entity.Cliente;
 import br.edu.solutis.dev.trail.locadora.repository.AluguelRepository;
@@ -74,4 +75,9 @@ public class AluguelService {
 
         aluguelRepository.delete(aluguel);
     }
+
+    public List<Aluguel> buscarAlugueisConfirmados(Long clienteId) {
+        return aluguelRepository.findByClienteIdAndStatus(clienteId, AluguelStatus.CONFIRMADO);
+    }
+
 }

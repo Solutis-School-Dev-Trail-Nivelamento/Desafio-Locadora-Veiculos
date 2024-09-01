@@ -7,6 +7,7 @@ import lombok.ToString;
 @Data
 @ToString
 @Entity
+@Table(name= "tb_carro_fabricante")
 public class Fabricante {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

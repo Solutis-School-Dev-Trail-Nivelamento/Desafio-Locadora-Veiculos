@@ -1,6 +1,6 @@
 package br.edu.solutis.dev.trail.locadora.model.entity;
 
-public enum StatusCarrinho {
+public enum CarrinhoStatus {
     ABERTO,
     CONFIRMADO,
     FINALIZADO

@@ -59,10 +59,10 @@ public class ClienteController {
         return ResponseEntity.noContent().build();
     }
 
-    /*@GetMapping("/cliente/{id}/alugueis")
-    @Operation(summary = "Exibe os aluguéis do usuário", description = "Exibe ao usuário todos os aluguéis relacionados ao seu id")
+    @GetMapping("/cliente/{id}/alugueis-confirmados")
+    @Operation(summary = "Exibe os aluguéis confirmados do cliente", description = "Exibe todos os aluguéis confirmados relacionados ao cliente pelo seu ID")
     public ResponseEntity<List<Aluguel>> alugueisConfirmados(@PathVariable Long id) {
-        List<Aluguel> alugueis = clienteService.(id);
+        List<Aluguel> alugueis = aluguelService.buscarAlugueisConfirmados(id);
         return ResponseEntity.ok(alugueis);
-    }*/
+    }
 }
