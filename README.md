@@ -5,7 +5,8 @@ Esta aplicação é um sistema de gerenciamento de locação de veículos, const
 
 ## Requisitos
 Java 17: A aplicação requer o Java 17.
-Gradle: Certifique-se de que o Gradle está instalado na sua máquina. Guia de instalação do Gradle
+
+Gradle: Certifique-se de que o Gradle está instalado na sua máquina. 
 
 ## Swagger para requisição http:
 1. Inicie a aplicação.
@@ -26,36 +27,37 @@ A camada DTO (Data Transfer Object) também é comumente utilizada em aplicaçõ
 - **Segurança:** Evita que campos sensíveis das entidades sejam expostos.
 - **Desempenho:** Pode reduzir a quantidade de dados transferidos, especialmente ao filtrar campos não necessários.
 
-# Dependências: 
+## Dependências: 
 
 O projeto utiliza as seguintes dependências:
 
-Spring Boot Starter Data JPA: Para a integração com o JPA.
-Spring Boot Starter Web: Para construir a API REST.
-Springdoc OpenAPI: Para gerar a documentação OpenAPI.
-MapStruct: Para mapeamento de objetos.
-Lombok: Para reduzir o boilerplate code.
-Spring Boot Starter Actuator: Para monitoramento da aplicação.
-MySQL Connector/J: Para conectar ao banco de dados MySQL.
-JUnit: Para testes.
-Logback: Para logging.
+- Spring Boot Starter Data JPA: Para a integração com o JPA.
+- Spring Boot Starter Web: Para construir a API REST.
+- Springdoc OpenAPI: Para gerar a documentação OpenAPI.
+- MapStruct: Para mapeamento de objetos.
+- Lombok: Para reduzir o boilerplate code.
+- Spring Boot Starter Actuator: Para monitoramento da aplicação.
+- MySQL Connector/J: Para conectar ao banco de dados MySQL.
+- JUnit: Para testes.
+- Logback: Para logging.
 
-# Configuração
+## Configuração
 Banco de Dados
 Configuração Inicial: No arquivo src/main/resources/application.yml, configure o banco de dados MySQL com a URL, o usuário e a senha apropriados.
 
-# Criação das Tabelas: Para realizar a criação da primeira tabela, altere o campo ddl-auto para "create". Depois de criar as tabelas iniciais, altere de volta para "update" para manter o esquema atualizado.
+## Criação das Tabelas: 
+Para realizar a criação da primeira tabela, altere o campo ddl-auto para "create". Depois de criar as tabelas iniciais, altere de volta para "update" para manter o esquema atualizado.
 
-Ordem para Adicionar Dados às Tabelas
+Ordem para adicionar dados às tabelas:
 Use o Swagger UI para adicionar dados às tabelas na seguinte ordem:
 
-Acessório
-Fabricante
-Modelo
-Carro
-Cliente
-Aluguel
-Carrinho
-Pagamento
+- Acessório
+- Fabricante
+- Modelo
+- Carro
+- Cliente
+- Aluguel
+- Carrinho
+- Pagamento
 
 
