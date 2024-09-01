@@ -2,6 +2,7 @@ package br.edu.solutis.dev.trail.locadora.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
@@ -41,6 +42,10 @@ public class Aluguel implements Serializable {
     private LocalDate dataDevolucao;
     private BigDecimal valorTotal;
     private int quantidadeDias;
+
+    @Setter
+    @Enumerated(EnumType.STRING)
+    private AluguelStatus status;
 
     public Aluguel() {
     }

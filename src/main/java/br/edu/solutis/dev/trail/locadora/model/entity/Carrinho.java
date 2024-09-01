@@ -19,12 +19,4 @@ public class Carrinho {
 
     @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL)
     private List<Aluguel> alugueis;
-
-    /*@OneToMany
-    private Carro carroSelecionado;
-
-    public void limparCarrinho() {
-        carroSelecionado = null;
-    }*/
-
 }

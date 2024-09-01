@@ -1,50 +1,60 @@
 package br.edu.solutis.dev.trail.locadora.service;
 
 import br.edu.solutis.dev.trail.locadora.exceptions.BusinessException;
+import br.edu.solutis.dev.trail.locadora.mappers.CarroMapper;
+import br.edu.solutis.dev.trail.locadora.model.dto.CarroDTO;
 import br.edu.solutis.dev.trail.locadora.model.entity.Carro;
 import br.edu.solutis.dev.trail.locadora.repository.CarroRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CarroService {
 
-    private static final Logger logger = LoggerFactory.getLogger(CarroService.class);
-
     @Autowired
     private CarroRepository carroRepository;
 
-    @Transactional
-    public void salvarCarro(Carro carro) {
-        logger.info("Cadastrando novo carro.");
+    @Autowired
+    private CarroMapper carroMapper;
 
-        validarCarro(carro);
-        verificarExistencia(carro);
-
-        Carro carroCadastrado = carroRepository.save(carro);
-        logger.info("Carro cadastrado com sucesso ID: {}", carroCadastrado.getId());
+    public CarroDTO create(CarroDTO carroDTO) {
+        Carro carro = carroMapper.toEntity(carroDTO);
+        carro = carroRepository.save(carro);
+        return carroMapper.toDto(carro);
     }
 
-    private void validarCarro(Carro carro) {
-        validarCampoNaoNulo(carro.getPlaca(), "placa");
-        validarCampoNaoNulo(carro.getModelo().getDescricao(), "modelo");
-    }
-
-    private void validarCampoNaoNulo(String campo, String nomeCampo) {
-        if (campo == null || campo.isEmpty()) {
-            String mensagem = String.format("O campo %s não pode ser nulo.", nomeCampo);
-            logger.error(mensagem);
-            throw new BusinessException(mensagem);
+    public CarroDTO findById(Long id) {
+        Optional<Carro> carroOpt = carroRepository.findById(id);
+        if (carroOpt.isEmpty()) {
+            throw new BusinessException("Carro não encontrado com ID: " + id);
         }
+        return carroMapper.toDto(carroOpt.get());
     }
 
-    private void verificarExistencia(Carro carro) {
-        if (carroRepository.existsByPlaca(carro.getPlaca())) {
-            logger.error("Placa já cadastrada");
-            throw new BusinessException("Placa já cadastrada");
+    public List<CarroDTO> findAll() {
+        List<Carro> carros = carroRepository.findAll();
+        return carroMapper.toDtoList(carros);
+    }
+
+    public CarroDTO update(Long id, CarroDTO carroDTO) {
+        Optional<Carro> carroOpt = carroRepository.findById(id);
+        if (carroOpt.isEmpty()) {
+            throw new BusinessException("Carro não encontrado com ID: " + id);
         }
+
+        Carro carro = carroOpt.get();
+        carroMapper.updateEntityFromDto(carroDTO, carro);
+        carro = carroRepository.save(carro);
+        return carroMapper.toDto(carro);
+    }
+
+    public void delete(Long id) {
+        if (!carroRepository.existsById(id)) {
+            throw new BusinessException("Carro não encontrado com ID: " + id);
+        }
+        carroRepository.deleteById(id);
     }
 }
