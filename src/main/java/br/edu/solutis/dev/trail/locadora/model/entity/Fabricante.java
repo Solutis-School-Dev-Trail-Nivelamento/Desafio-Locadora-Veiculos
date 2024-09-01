@@ -7,16 +7,11 @@ import lombok.ToString;
 @Data
 @ToString
 @Entity
-public class Fabricante { //atualizar esta classe
-
+public class Fabricante {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 100, nullable = false, unique = true)
     private String nome;
-
-   /* @OneToMany(mappedBy = "fabricante", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Carro> modelos = new ArrayList<>();*/
-
 }
-

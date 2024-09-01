@@ -12,6 +12,14 @@ public class ModeloCarro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 255, nullable = false,unique = true)
+    @Column(length = 255, nullable = false, unique = true)
     private String descricao;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 50, nullable = false)
+    private Categoria categoria;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fabricante_id", nullable = false)
+    private Fabricante fabricante;
 }
