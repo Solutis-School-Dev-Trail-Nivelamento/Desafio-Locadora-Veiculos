@@ -46,7 +46,7 @@ Banco de Dados
 Configuração Inicial: No arquivo src/main/resources/application.yml, configure o banco de dados MySQL com a URL, o usuário e a senha apropriados.
 
 ## Criação das Tabelas: 
-Para realizar a criação da primeira tabela, altere o campo ddl-auto para "create". Depois de criar as tabelas iniciais, altere de volta para "update" para manter o esquema atualizado.
+Para realizar a criação da primeira tabela, altere o campo ddl-auto do arquivo application.yml para "create". Depois de criar as tabelas iniciais, altere de volta para "update" para manter o esquema atualizado.
 
 Ordem para adicionar dados às tabelas:
 Use o Swagger UI para adicionar dados às tabelas na seguinte ordem:
