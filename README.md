@@ -13,6 +13,7 @@ Esta aplicação é um sistema de gerenciamento de locação de veículos, const
 - Apolilce Seguro (Completo): Lucas e Vinicius
 - Carrinho (Completo) : Filipe e Heloisa
 - Pagamento (Completo) : Heloisa
+- Documentação (README.md): Beatriz 
 
 ## Requisitos
 Java 17: A aplicação requer o Java 17.
