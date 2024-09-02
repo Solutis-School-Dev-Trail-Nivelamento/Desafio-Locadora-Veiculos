@@ -19,6 +19,25 @@ Gradle: Certifique-se de que o Gradle está instalado na sua máquina.
 ## Swagger para requisição http:
 1. Inicie a aplicação.
 2. **Swagger:** `http://localhost:8080/swagger-ui/index.html`
+
+## Configuração
+Banco de Dados
+Configuração Inicial: No arquivo src/main/resources/application.yml, configure o banco de dados MySQL com a URL, o usuário e a senha apropriados.
+
+## Criação das Tabelas:
+Para realizar a criação da primeira tabela, altere o campo ddl-auto do arquivo application.yml para "create". Depois de criar as tabelas iniciais, altere de volta para "update" para manter o esquema atualizado.
+
+Ordem para adicionar dados às tabelas:
+Use o Swagger UI para adicionar dados às tabelas na seguinte ordem:
+
+- Acessório
+- Fabricante
+- Modelo Carro
+- Carro
+- Cliente
+- Aluguel
+- Carrinho
+- Pagamento
   
 ## Estrutura do projeto:
 - **Entidade:** Representa a tabela no banco.
@@ -49,23 +68,6 @@ O projeto utiliza as seguintes dependências:
 - JUnit: Para testes.
 - Logback: Para logging.
 
-## Configuração
-Banco de Dados
-Configuração Inicial: No arquivo src/main/resources/application.yml, configure o banco de dados MySQL com a URL, o usuário e a senha apropriados.
 
-## Criação das Tabelas: 
-Para realizar a criação da primeira tabela, altere o campo ddl-auto do arquivo application.yml para "create". Depois de criar as tabelas iniciais, altere de volta para "update" para manter o esquema atualizado.
-
-Ordem para adicionar dados às tabelas:
-Use o Swagger UI para adicionar dados às tabelas na seguinte ordem:
-
-- Acessório
-- Fabricante
-- Modelo
-- Carro
-- Cliente
-- Aluguel
-- Carrinho
-- Pagamento
 
 
