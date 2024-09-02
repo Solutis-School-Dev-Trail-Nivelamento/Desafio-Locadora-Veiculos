@@ -23,4 +23,7 @@ public class ModeloCarro {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fabricante_id", nullable = false)
     private Fabricante fabricante;
+
+    public ModeloCarro() {
+    }
 }

@@ -1,6 +1,8 @@
 package br.edu.solutis.dev.trail.locadora.controller;
 
 import br.edu.solutis.dev.trail.locadora.model.entity.Aluguel;
+import br.edu.solutis.dev.trail.locadora.model.entity.AluguelStatus;
+import br.edu.solutis.dev.trail.locadora.repository.AluguelRepository;
 import br.edu.solutis.dev.trail.locadora.service.AluguelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,6 +20,9 @@ import java.util.List;
 public class AluguelController {
     @Autowired
     private AluguelService aluguelService;
+
+    @Autowired
+    private AluguelRepository aluguelRepository;
 
     @PostMapping("/aluguel")
     @Operation(summary = "Cria um aluguel", description = "Cria um novo aluguel com as informações fornecidas")
@@ -52,4 +57,11 @@ public class AluguelController {
         aluguelService.deletarAluguel(id);
         return ResponseEntity.noContent().build();
     }
+
+   /* @GetMapping("/carro/{carroId}/reservados")
+    @Operation(summary = "Listar aluguéis reservados", description = "Lista todos os aluguéis reservados de um carro específico")
+    public ResponseEntity<List<Aluguel>> listarAlugueisReservados(@PathVariable Long carroId) {
+        List<Aluguel> alugueisReservados = aluguelRepository.findByCarroIdAndStatus(carroId, AluguelStatus.RESERVADO);
+        return ResponseEntity.ok(alugueisReservados);
+    }*/
 }

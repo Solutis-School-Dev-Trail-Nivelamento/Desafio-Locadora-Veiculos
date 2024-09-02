@@ -20,5 +20,8 @@ public interface AluguelRepository extends JpaRepository<Aluguel, Long> {
                                           @Param("dataFim") LocalDate dataFim);
 
     List<Aluguel> findByClienteIdAndStatus(Long clienteId, AluguelStatus status);
+
+    @Query("SELECT a FROM Aluguel a WHERE a.carro.id = :carroId AND a.status = :status")
+    List<Aluguel> findByCarroIdAndStatus(@Param("carroId") Long carroId, @Param("status") AluguelStatus status);
 }
 

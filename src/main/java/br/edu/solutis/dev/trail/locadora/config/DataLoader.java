@@ -8,12 +8,13 @@ import org.springframework.context.annotation.Configuration;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Configuration
 public class DataLoader {
 
   @Bean
-    CommandLineRunner initDatabase(ClienteRepository clienteRepository, CarroRepository carroRepository, AluguelRepository aluguelRepository) {
+    CommandLineRunner initDatabase(ClienteRepository clienteRepository, CarroRepository carroRepository, ModeloCarroRepository modeloRepository, FabricanteRepository fabricanteRepository, AcessorioRepository acessorioRepository) {
         return args -> {
            // Criando clientes
           /*  Cliente cliente1 = new Cliente("Marina Silva", "12345678903", "marina.silva@example.com", LocalDate.of(1990, 1, 1), Sexo.FEMININO, "123456788");
@@ -25,16 +26,40 @@ public class DataLoader {
             clienteRepository.save(cliente3);
             clienteRepository.save(cliente4);*/
 
+/*
 
+            // Criando fabricante
+            Fabricante fabricante = new Fabricante();
+            fabricante.setId(1L);
+            fabricante.setNome("HONDA");
+            fabricanteRepository.save(fabricante);
 
-           /* ModeloCarro modelo = new ModeloCarro(); // Supondo que você tenha uma entidade ModeloCarro
-            modelo.setDescricao("Civic");
+            // Criando modelo
+            ModeloCarro modelo = new ModeloCarro();
+            modelo.setId(1L);
+            modelo.setDescricao("City");
+            modelo.setCategoria(Categoria.SEDAN_COMPACTO);
+            modelo.setFabricante(fabricante);
+            modeloRepository.save(modelo);
 
-            Carro carro = new Carro("ABC-1234", "1HGCM82633A123456", "Preto", new BigDecimal("150.00"), modelo);
+            // Criando acessório
+            Acessorio acessorio = new Acessorio();
+            acessorio.setId(1L);
+            acessorio.setDescricao("Som");
+            acessorioRepository.save(acessorio);
+
+            // Criando carro
+            Carro carro = new Carro();
+            carro.setPlaca("CLB-5653");
+            carro.setChassi("345DSG54GDS");
+            carro.setCor("BRANCO");
+            carro.setValorDiaria(new BigDecimal("150.00"));
+            carro.setModelo(modelo);
+            carro.setAcessorios(List.of(acessorio));
             carroRepository.save(carro);
+*/
 
-            Aluguel aluguel = new Aluguel(cliente1, carro, LocalDate.of(2024, 9, 1), LocalDate.of(2024, 9, 10));
-            aluguelRepository.save(aluguel);*/
+
         };
     }
 }

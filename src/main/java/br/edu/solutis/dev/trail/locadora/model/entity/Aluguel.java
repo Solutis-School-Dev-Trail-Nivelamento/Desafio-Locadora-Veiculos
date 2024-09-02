@@ -42,6 +42,7 @@ public class Aluguel implements Serializable {
 
     @Setter
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)
     private AluguelStatus status;
 
     public Aluguel() {

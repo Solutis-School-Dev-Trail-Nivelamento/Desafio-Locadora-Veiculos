@@ -1,5 +1,6 @@
 package br.edu.solutis.dev.trail.locadora.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -39,6 +40,8 @@ public class Carro {
             joinColumns = @JoinColumn(name = "carro_id"),
             inverseJoinColumns = @JoinColumn(name = "acessorio_id")
     )
+
+    @JsonManagedReference
     private List<Acessorio> acessorios = new ArrayList<>();
 
 

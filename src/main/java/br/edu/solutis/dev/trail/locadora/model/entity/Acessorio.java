@@ -1,5 +1,6 @@
 package br.edu.solutis.dev.trail.locadora.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -19,5 +20,6 @@ public class Acessorio {
     private String descricao;
 
     @ManyToMany(mappedBy = "acessorios")
+    @JsonBackReference
     private List<Carro> carros;
 }
