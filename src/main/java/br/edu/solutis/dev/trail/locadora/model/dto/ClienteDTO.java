@@ -14,6 +14,8 @@ import java.util.List;
 @Data
 public class ClienteDTO {
 
+    private Long Id;
+
     @NotBlank(message = "O campo nome não pode estar vazio")
     @Schema(example = "João da Silva")
     private String nome;

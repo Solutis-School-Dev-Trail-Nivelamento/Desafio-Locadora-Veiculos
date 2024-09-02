@@ -25,13 +25,11 @@ public class DataLoader {
             clienteRepository.save(cliente2);
             clienteRepository.save(cliente3);
             clienteRepository.save(cliente4);
-
-/*
-
+*/
+            /*
             // Criando fabricante
             Fabricante fabricante = new Fabricante();
-            fabricante.setId(1L);
-            fabricante.setNome("HONDA");
+            fabricante.setNome("FORD");
             fabricanteRepository.save(fabricante);
 
             // Criando modelo
