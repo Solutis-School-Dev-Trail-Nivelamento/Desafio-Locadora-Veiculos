@@ -3,6 +3,14 @@
 ## Descrição
 Esta aplicação é um sistema de gerenciamento de locação de veículos, construído com Java e Spring Boot.
 
+## Tarefas:
+- Cliente (Completo) : Heloisa
+- Carro (Completo): Vinicius e Lucas
+- Aluguel (Completo): Beatriz e Heloisa
+- Apolilce Seguro (Completo): Lucas
+- Carrinho (Completo) : Filipe e Heloisa
+- Pagamento (Completo) : Heloisa
+
 ## Requisitos
 Java 17: A aplicação requer o Java 17.
 
