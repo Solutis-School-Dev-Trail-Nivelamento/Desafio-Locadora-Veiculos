@@ -10,7 +10,7 @@ Esta aplicação é um sistema de gerenciamento de locação de veículos, const
 - Fabricante (Completo): Vinicius e Lucas
 - Acesssorios (Completo): Vinicius e Lucas
 - Aluguel (Completo): Beatriz e Heloisa
-- Apolilce Seguro (Completo): Lucas e Vinicius
+- Apólice Seguro (Completo): Lucas e Vinicius
 - Carrinho (Completo) : Filipe e Heloisa
 - Pagamento (Completo) : Heloisa
 - Documentação (README.md): Beatriz 
