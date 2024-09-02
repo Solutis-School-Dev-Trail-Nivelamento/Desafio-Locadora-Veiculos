@@ -24,7 +24,7 @@ public class DataLoader {
             clienteRepository.save(cliente1);
             clienteRepository.save(cliente2);
             clienteRepository.save(cliente3);
-            clienteRepository.save(cliente4);*/
+            clienteRepository.save(cliente4);
 
 /*
 
