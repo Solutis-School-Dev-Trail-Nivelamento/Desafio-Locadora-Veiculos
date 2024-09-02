@@ -6,8 +6,11 @@ Esta aplicação é um sistema de gerenciamento de locação de veículos, const
 ## Tarefas:
 - Cliente (Completo) : Heloisa
 - Carro (Completo): Vinicius e Lucas
+- Modelo Carro (Completo): Vinicius e Lucas
+- Fabricante (Completo): Vinicius e Lucas
+- Acesssorios (Completo): Vinicius e Lucas
 - Aluguel (Completo): Beatriz e Heloisa
-- Apolilce Seguro (Completo): Lucas
+- Apolilce Seguro (Completo): Lucas e Vinicius
 - Carrinho (Completo) : Filipe e Heloisa
 - Pagamento (Completo) : Heloisa
 
